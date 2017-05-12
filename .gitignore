@@ -1,4 +1,4 @@
 /repo/*
 !/repo/readme.md
-/root/*
-!/root/readme.md
+/work/*
+!/work/readme.md

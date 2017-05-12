@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+ROOT=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
+
+# Modify NOT (yet)
+REPO_ROOT=${ROOT}/repo
+WORK_DIR=${ROOT}/work
+WEB_DIR=${ROOT}/web
+
+if [ -z "$1" ]
+  then
+    echo "No project supplied"
+    exit 1
+fi
+
+PROJECT=$1
+
+REPO_DIR=${REPO_ROOT}/${PROJECT}.git
+
+if [ -d "${REPO_DIR}" ]; then
+  echo "ERROR: Project already exists!"
+  exit 1
+fi
+
+echo "Creating git project '${PROJECT}'"
+mkdir ${REPO_DIR}
+
+pushd ${REPO_DIR} >/dev/null 2>&1
+git --bare init
+cp ${ROOT}/tpl/hooks/post-receive ${REPO_DIR}/hooks/
+popd >/dev/null 2>&1
+
+echo "Creating working copy in '${WORK_DIR}'"
+pushd ${WORK_DIR} >/dev/null 2>&1
+git clone ${REPO_DIR}
+popd >/dev/null 2>&1

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+ROOT=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
+
+# Modify NOT (yet)
+REPO_ROOT=${ROOT}/repo
+WORK_DIR=${ROOT}/work
+WEB_DIR=${ROOT}/web
+
+if [ -z "$1" ]
+  then
+    echo "No project supplied"
+    exit 1
+fi
+
+PROJECT=$1
+
+rm -rf ${REPO_ROOT}/${PROJECT}.git
+rm -rf ${WORK_DIR}/${PROJECT}
+rm -rf ${WEB_DIR}/${PROJECT}
