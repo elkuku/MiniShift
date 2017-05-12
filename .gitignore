@@ -2,3 +2,5 @@
 !/repo/readme.md
 /work/*
 !/work/readme.md
+/web/*
+!/web/readme.md
