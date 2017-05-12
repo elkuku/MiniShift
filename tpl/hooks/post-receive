@@ -38,11 +38,12 @@ fi
 if [ -d ${PROJECT_DIR}/web ]; then
   echo "Setting 'web' directory as web root"
   ln -s ${PROJECT_DIR}/web ${WEB_DIR}/${PROJECT}
+elif [ -d ${PROJECT_DIR}/www ]; then
+  echo "Setting 'www' directory as web root"
+  ln -s ${PROJECT_DIR}/www ${WEB_DIR}/${PROJECT}
 else
-  echo "Setting project root as web root"
+  echo "Setting **project root** as web root"
   ln -s ${PROJECT_DIR} ${WEB_DIR}/${PROJECT}
 fi
 
-
 echo "TODO BIEN =;)"
-
