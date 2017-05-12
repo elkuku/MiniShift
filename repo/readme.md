@@ -1,0 +1,1 @@
+The bare git repositories

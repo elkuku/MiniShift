@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Modify
+PROJECT=CHANGE_ME_PROJECT
+GIT_BASE=/git
+
+# Modify NOT (yet)
+GIT_DIR=${GIT_BASE}/repo/${PROJECT}.git
+WORK_TREE=${GIT_BASE}/root
+PROJECT_DIR=${WORK_TREE}/${PROJECT}
+
+if [ -d "${WORK_TREE}/${PROJECT}" ]; then
+
+  echo "Checkout ${GIT_DIR} to ${PROJECT_DIR} ..."
+
+  git --work-tree=${PROJECT_DIR} --git-dir=${GIT_DIR} checkout -f
+
+else
+
+  echo "Clone ${GIT_DIR} into ${WORK_TREE}"
+  pushd ${WORK_TREE} >/dev/null 2>&1
+  git clone ${GIT_DIR}
+  popd >/dev/null 2>&1
+
+fi
+
+cat ${GIT_DIR}/refs/heads/master > ${PROJECT_DIR}/sha.txt
+
+if [ -f ${PROJECT_DIR}/composer.json ]; then
+  echo "Found composer.json"
+  pushd ${PROJECT_DIR} >/dev/null 2>&1
+  composer install
+  popd >/dev/null 2>&1
+fi
+
+echo "TODO BIEN =;)"
+
