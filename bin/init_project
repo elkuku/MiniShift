@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
-ROOT=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
+ROOT_DIR=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
 
-# Modify NOT (yet)
-REPO_ROOT=${ROOT}/repo
-WORK_DIR=${ROOT}/work
-WEB_DIR=${ROOT}/web
+# Modify
+REPO_DIR=repo
+WORK_DIR=work
+WEB_DIR=web
 GIT_USER=git
+
+WORK_ROOT=${ROOT_DIR}/${WORK_DIR}
+WEB_ROOT=${ROOT_DIR}/${WEB_DIR}
 
 if [ -z "$1" ]
   then
@@ -16,31 +19,44 @@ fi
 
 PROJECT=$1
 
-REPO_DIR=${REPO_ROOT}/${PROJECT}.git
+REPO_ROOT=${ROOT_DIR}/${REPO_DIR}/${PROJECT}.git
 
-if [ -d "${REPO_DIR}" ]; then
+if [ -d "${REPO_ROOT}" ]; then
   echo "ERROR: Project already exists!"
   exit 1
 fi
 
 echo "Creating git project '${PROJECT}'"
-mkdir ${REPO_DIR}
+mkdir ${REPO_ROOT}
 
-pushd ${REPO_DIR} >/dev/null 2>&1
+pushd ${REPO_ROOT} >/dev/null 2>&1
 git --bare init
-cp ${ROOT}/tpl/hooks/post-receive ${REPO_DIR}/hooks/
+cp ${ROOT_DIR}/tpl/hooks/post-receive ${REPO_ROOT}/hooks/
 popd >/dev/null 2>&1
 
-echo "Creating working copy in '${WORK_DIR}'"
-pushd ${WORK_DIR} >/dev/null 2>&1
-git clone ${REPO_DIR}
+echo "Creating working copy in '${WORK_ROOT}'"
+pushd ${WORK_ROOT} >/dev/null 2>&1
+git clone ${REPO_ROOT}
 popd >/dev/null 2>&1
 
-chown -R ${GIT_USER}:${GIT_USER} ${REPO_DIR}
-chown -R ${GIT_USER}:${GIT_USER} ${WORK_DIR}/${PROJECT}
+chown -R ${GIT_USER}:${GIT_USER} ${REPO_ROOT}
+chown -R ${GIT_USER}:${GIT_USER} ${WORK_ROOT}/${PROJECT}
 
 echo "Creating symlink in web dir"
-ln -s ${WORK_DIR}/${PROJECT} ${WEB_DIR}/${PROJECT}
+ln -s ${WORK_ROOT}/${PROJECT} ${WEB_ROOT}/${PROJECT}
+
+HOST=$(hostname)
+IP="$(echo -e "$(hostname -I)" | tr -d '[:space:]')"
 
 echo
+echo "
+Access:
+http://${HOST}/${PROJECT}
+http://${IP}/${PROJECT}
+
+Clone:
+${GIT_USER}@${HOST}:${ROOT_DIR}/${REPO_DIR}/${PROJECT}.git
+${GIT_USER}@${IP}:${ROOT_DIR}/${REPO_DIR}/${PROJECT}.git
+"
+
 echo DONE
