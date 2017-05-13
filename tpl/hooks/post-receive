@@ -26,7 +26,8 @@ cat ${GIT_DIR}/refs/heads/master > ${PROJECT_DIR}/sha.txt
 if [ -f ${PROJECT_DIR}/composer.json ]; then
   echo "Found composer.json"
   pushd ${PROJECT_DIR} >/dev/null 2>&1
-  composer install
+  #composer install
+  composer install --no-ansi --no-progress --no-dev --optimize-autoloader
   popd >/dev/null 2>&1
 fi
 
