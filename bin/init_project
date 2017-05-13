@@ -38,3 +38,9 @@ popd >/dev/null 2>&1
 
 chown -R ${GIT_USER}:${GIT_USER} ${REPO_DIR}
 chown -R ${GIT_USER}:${GIT_USER} ${WORK_DIR}/${PROJECT}
+
+echo "Creating symlink in web dir"
+ln -s ${WORK_DIR}/${PROJECT} ${WEB_DIR}/${PROJECT}
+
+echo
+echo DONE
