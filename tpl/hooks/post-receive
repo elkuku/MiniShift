@@ -30,6 +30,13 @@ if [ -f ${PROJECT_DIR}/composer.json ]; then
   popd >/dev/null 2>&1
 fi
 
+if [ -f ${PROJECT_DIR}/bower.json ]; then
+  echo "Found bower.json"
+  pushd ${PROJECT_DIR} >/dev/null 2>&1
+  bower install
+  popd >/dev/null 2>&1
+fi
+
 echo "Setup web dir"
 if [ -L "${WEB_DIR}/${PROJECT}" ]; then
   rm -rf "${WEB_DIR}/${PROJECT}"
