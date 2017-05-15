@@ -1,15 +1,23 @@
 #!/bin/bash
 
-REPO_ROOT=$(realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..")
-ROOT=$(realpath ${REPO_ROOT}/../..)
+ROOT_DIR=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
 
-PROJECT=$(basename ${REPO_ROOT} .git)
+# Modify
+REPO_DIR=repo
+WORK_DIR=work
+WEB_DIR=web
+GIT_USER=git
 
 # Modify NOT (yet)
-GIT_DIR=${ROOT}/repo/${PROJECT}.git
-WORK_TREE=${ROOT}/work
+ROOT=$(realpath ${ROOT_DIR}/../..)
+PROJECT=$(basename ${ROOT_DIR} .git)
+GIT_DIR=${ROOT}/${REPO_DIR}/${PROJECT}.git
+WORK_TREE=${ROOT}/${WORK_DIR}
 PROJECT_DIR=${WORK_TREE}/${PROJECT}
-WEB_DIR=${ROOT}/web
+WEB_DIR=${ROOT}/${WEB_DIR}
+
+# Symfony rulez!
+export SYMFONY_ENV=prod
 
 if [ -d "${WORK_TREE}/${PROJECT}" ]; then
   echo "Checkout ${GIT_DIR} to ${PROJECT_DIR} ..."
@@ -26,7 +34,6 @@ cat ${GIT_DIR}/refs/heads/master > ${PROJECT_DIR}/sha.txt
 if [ -f ${PROJECT_DIR}/composer.json ]; then
   echo "Found composer.json"
   pushd ${PROJECT_DIR} >/dev/null 2>&1
-  #composer install
   composer install --no-ansi --no-progress --no-dev --optimize-autoloader
   popd >/dev/null 2>&1
 fi
