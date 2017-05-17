@@ -28,6 +28,11 @@ class CreateProjectCommand extends Command
 				InputArgument::REQUIRED,
 				'The project name'
 			)
+			->addArgument(
+				'preserve',
+				InputArgument::OPTIONAL,
+				'Preserve permissions'
+			)
 		;
 	}
 
@@ -60,13 +65,12 @@ class CreateProjectCommand extends Command
 
 			echo shell_exec('cd "'.$this->workDir . '"; git clone '.$this->repoDir . '/' . $repoDirName.' 2>&1');
 
-			// Changing permissions
-			if (false)
+			if (!$input->getArgument('preserve'))
 			{
-			$fs->chown($this->repoDir . '/' . $repoDirName, $this->config->gitUser, true);
-			$fs->chgrp($this->repoDir . '/' . $repoDirName, $this->config->gitUser, true);
-			$fs->chown($this->workDir . '/' . $project, $this->config->gitUser, true);
-			$fs->chgrp($this->workDir . '/' . $project, $this->config->gitUser, true);
+				$fs->chown($this->repoDir . '/' . $repoDirName, $this->config->gitUser, true);
+				$fs->chgrp($this->repoDir . '/' . $repoDirName, $this->config->gitUser, true);
+				$fs->chown($this->workDir . '/' . $project, $this->config->gitUser, true);
+				$fs->chgrp($this->workDir . '/' . $project, $this->config->gitUser, true);
 			}
 
 			$io->section('Creating symlink in web dir');
