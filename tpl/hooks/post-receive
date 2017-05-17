@@ -57,7 +57,7 @@ elif [ -d ${PROJECT_DIR}/www ]; then
   echo "Setting 'www' directory as web root"
   ln -s ${PROJECT_DIR}/www ${WEB_DIR}/${PROJECT}
 else
-  echo "Setting **project root** as web root"
+  echo "Setting the PROJECT ROOT as web root"
   ln -s ${PROJECT_DIR} ${WEB_DIR}/${PROJECT}
 fi
 
