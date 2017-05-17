@@ -18,6 +18,8 @@ Otherwise change `/git` to your chosen path.
 
 If you don't have to take that much care about security, you might also want to change your web servers user to the git user... or fiddle with permissions.
 
+Here is an [example](https://gist.github.com/elkuku/9b1137e9b817e79454e3dbd2f1bd4373)
+
 ## Usage
 
 Create a new project on your server<br />
