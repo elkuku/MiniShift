@@ -1,0 +1,20 @@
+{
+    "name": "elkuku/mini-shift",
+    "description": "Like OpenShift, just Mini",
+    "license": "WTFPL",
+    "authors": [
+        {
+            "name": "elkuku",
+            "email": "der.el.kuku@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^3.2",
+        "symfony/filesystem": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "MiniShift\\": "bin/"
+        }
+    }
+}
