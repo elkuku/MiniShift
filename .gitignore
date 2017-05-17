@@ -4,3 +4,5 @@
 !/work/readme.md
 /web/*
 !/web/readme.md
+
+/vendor/
