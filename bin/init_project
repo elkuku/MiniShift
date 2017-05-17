@@ -31,6 +31,7 @@ mkdir ${REPO_ROOT}
 
 pushd ${REPO_ROOT} >/dev/null 2>&1
 git --bare init
+cp ${ROOT_DIR}/tpl/hooks/pre-receive ${REPO_ROOT}/hooks/
 cp ${ROOT_DIR}/tpl/hooks/post-receive ${REPO_ROOT}/hooks/
 popd >/dev/null 2>&1
 
