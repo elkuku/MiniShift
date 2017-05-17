@@ -14,16 +14,20 @@ NOT meant for any production like environments!
 * Clone this repository "somewhere" to your server.<br />
 It is assumed here that you clone to the directory `/git` at your servers root.<br />
 Otherwise change `/git` to your chosen path.
+* `cd /git`
+* `composer install`
+* You may create a symlink like<br />
+  `ln -s /git/bin/console /usr/bin/minishift`
 * Set The servers web root to `/git/web`. We don't want to do anything else with the server ;)
 
 If you don't have to take that much care about security, you might also want to change your web servers user to the git user... or fiddle with permissions.
 
-Here is an [example](https://gist.github.com/elkuku/9b1137e9b817e79454e3dbd2f1bd4373)
+Here is an [example](https://gist.github.com/elkuku/9b1137e9b817e79454e3dbd2f1bd4373) of what I did to my server.
 
 ## Usage
 
 Create a new project on your server<br />
-`# /git/bin/init_project testOne`
+`# /git/bin/console new testOne`
 
 On your local machine do<br />
 `$ git clone git@{IP_OR_SERVER}:/git/repo/testOne.git`
@@ -37,7 +41,17 @@ Your site should be published at<br />
 Add and change more files then<br />
 `$ git push`
 
-...
+Rinse and repeat...
+
+### Commands
+It is assumed that you created a symlink from `/git/bin/console` to be used as `minishift`
+
+* Create Project<br />
+`minishift new {project}`
+* Delete Project<br />
+`minishift rm {project}`
+* List Projects<br />
+`minishift info`
 
 ## Directory structure
 ```
