@@ -2,63 +2,7 @@
 
 ROOT_DIR=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
 
-# Modify
-REPO_DIR=repo
-WORK_DIR=work
-WEB_DIR=web
-GIT_USER=git
-
-# Modify NOT (yet)
 ROOT=$(realpath ${ROOT_DIR}/../..)
 PROJECT=$(basename ${ROOT_DIR} .git)
-GIT_DIR=${ROOT}/${REPO_DIR}/${PROJECT}.git
-WORK_TREE=${ROOT}/${WORK_DIR}
-PROJECT_DIR=${WORK_TREE}/${PROJECT}
-WEB_DIR=${ROOT}/${WEB_DIR}
 
-# Symfony rulez!
-export SYMFONY_ENV=prod
-
-if [ -d "${WORK_TREE}/${PROJECT}" ]; then
-  echo "Checkout ${GIT_DIR} to ${PROJECT_DIR} ..."
-  git --work-tree=${PROJECT_DIR} --git-dir=${GIT_DIR} checkout -f
-else
-  echo "Clone ${GIT_DIR} into ${WORK_TREE}"
-  pushd ${WORK_TREE} >/dev/null 2>&1
-  git clone ${GIT_DIR}
-  popd >/dev/null 2>&1
-fi
-
-cat ${GIT_DIR}/refs/heads/master > ${PROJECT_DIR}/sha.txt
-
-if [ -f ${PROJECT_DIR}/composer.json ]; then
-  echo "Found composer.json"
-  pushd ${PROJECT_DIR} >/dev/null 2>&1
-  composer install --no-ansi --no-progress --no-dev --optimize-autoloader
-  popd >/dev/null 2>&1
-fi
-
-if [ -f ${PROJECT_DIR}/bower.json ]; then
-  echo "Found bower.json"
-  pushd ${PROJECT_DIR} >/dev/null 2>&1
-  bower install
-  popd >/dev/null 2>&1
-fi
-
-echo "Setup web dir"
-if [ -L "${WEB_DIR}/${PROJECT}" ]; then
-  rm -rf "${WEB_DIR}/${PROJECT}"
-fi
-
-if [ -d ${PROJECT_DIR}/web ]; then
-  echo "Setting 'web' directory as web root"
-  ln -s ${PROJECT_DIR}/web ${WEB_DIR}/${PROJECT}
-elif [ -d ${PROJECT_DIR}/www ]; then
-  echo "Setting 'www' directory as web root"
-  ln -s ${PROJECT_DIR}/www ${WEB_DIR}/${PROJECT}
-else
-  echo "Setting the PROJECT ROOT as web root"
-  ln -s ${PROJECT_DIR} ${WEB_DIR}/${PROJECT}
-fi
-
-echo "TODO BIEN =;)"
+${ROOT}/bin/console update ${PROJECT}
