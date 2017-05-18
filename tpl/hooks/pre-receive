@@ -2,7 +2,7 @@
 
 read oldrev newrev refname;
 
-if [[ "${refname}" != "/refs/heads/master" ]]; then
+if [[ "${refname}" != "/refs/heads/master" && "${refname}" != "refs/heads/master" ]]; then
   echo "ERROR: Only pushes to the 'master' branch are allowed"
   exit 1
 fi
