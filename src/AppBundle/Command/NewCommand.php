@@ -45,8 +45,8 @@ class NewCommand extends ContainerAwareCommand
         $fs->mkdir($repoDir);
         echo shell_exec('cd "'.$repoDir.'"; git --bare init 2>&1');
 
-        $fs->copy(ROOT.'/tpl/hooks/pre-receive', $repoDir.'/hooks/pre-receive');
-        $fs->copy(ROOT.'/tpl/hooks/post-receive', $repoDir.'/hooks/post-receive');
+        $fs->copy($root.'/tpl/hooks/pre-receive', $repoDir.'/hooks/pre-receive');
+        $fs->copy($root.'/tpl/hooks/post-receive', $repoDir.'/hooks/post-receive');
 
         $io->section('Creating working copy');
 
