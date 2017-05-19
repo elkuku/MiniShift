@@ -13,18 +13,21 @@ NOT meant for any production like environments!
 ## Installation
 
 * Setup your server to serve git repositories for ssh users (just follow [The Book](https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server))
+* Install [Composer](https://getcomposer.org) and [Bower](https://bower.io)
 * Clone this repository "somewhere" to your server.<br />
 It is assumed here that you clone to the directory `/git` at your servers root.<br />
 Otherwise change `/git` to your chosen path.
 * `cd /git`
 * `composer install`
-* You may create a symlink like<br />
+* `bower install`
+* You **may** create a symlink like<br />
   `ln -s /git/bin/console /usr/bin/minishift`
-* Set The servers web root to `/git/web`. We don't want to do anything else with the server ;)
+* Set The servers web root to `/git/web`.<br />
+ We don't want to do anything else with this server ;)
 
 If you don't have to take that much care about security, you might also want to change your web servers user to the git user... or fiddle with permissions.
 
-Here is an [example](https://gist.github.com/elkuku/9b1137e9b817e79454e3dbd2f1bd4373) of what I did to my server.
+Here is an [example](https://gist.github.com/elkuku/9b1137e9b817e79454e3dbd2f1bd4373) of what I did to my (debian flavour) server.
 
 ## Usage
 
