@@ -4,7 +4,9 @@ Inspired by [OpenShift](https://www.openshift.com/)
 
 ## WIP
 
-This is meant as a tiny setup to provide a staging server infrastructure. Web sites are managed as git repositories and published to a web directory on every "git push".
+This is meant as a tiny setup to provide a staging server infrastructure.
+
+Web sites are managed as git repositories and published to a web directory on every "git push".
 
 NOT meant for any production like environments!
 
