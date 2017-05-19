@@ -7,13 +7,13 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="test">
     <meta name="author" content="elkuku">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
 
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}MiniShift{% endblock %}</title>
 
     {% block stylesheets %}
-        <link href="{{ asset('vendor/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet" />
-        <link href="{{ asset('bundles/app/css/my-a.css') }}" rel="stylesheet" />
+        <link href="{{ asset('vendor/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('bundles/app/css/my-a.css') }}" rel="stylesheet"/>
     {% endblock %}
 </head>
 
@@ -22,22 +22,23 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="monkey-toy-32.png" style="display: inline" />MiniShift</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="{{ asset('bundles/app/img/monkey-toy-32.png') }}" style="display: inline"/>MiniShift</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-            {% if app.user %}
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{{ path('default.about') }}">About</a></li>
+                {% if app.user %}
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                {% endif %}
             </ul>
-            {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 {% if app.user %}
@@ -73,8 +74,8 @@
 </div>
 
 {% block javascripts %}
-<script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 {% endblock %}
 </body>
 </html>
