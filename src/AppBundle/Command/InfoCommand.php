@@ -61,8 +61,8 @@ class InfoCommand extends ContainerAwareCommand
                     $project.'.git',
                     $fs->exists($workDir.'/'.$project) ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
                     $fs->exists($webDir.'/'.$project) ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
-                    "$gitUser@$host:$repoDir}/$project.git",
-                    "$gitUser@$ip:$repoDir}/$project.git",
+                    "$gitUser@$host:$repoDir/$project.git",
+                    "$gitUser@$ip:$repoDir/$project.git",
                 ]
             );
         }
