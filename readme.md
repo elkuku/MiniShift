@@ -94,5 +94,11 @@ If a `bower.json` file is found at the project root,`bower install` will be exec
 * Only PHP projects (yet) - `@todo` add more
 * Lots of other features - as seen on [OpenShift](https://www.openshift.com/)...
 
+## Credits
+
+* Icon: http://www.freefavicon.com
+
+----
+
 hF,<br />
 `=;)`
