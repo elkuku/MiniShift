@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="text-center">
+        <img src="monkey-toy.png"/>
+        <h1>Projects</h1>
+        {% for project in projects %}
+            <h4><a href="{{ project }}">{{ project }}</a></h4>
+        {% endfor %}
+    </div>
+{% endblock %}
