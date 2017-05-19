@@ -1,0 +1,22 @@
+{
+  "name": "symfony-my-a",
+  "authors": [
+    "elkuku <der.el.kuku@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "GPL",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
