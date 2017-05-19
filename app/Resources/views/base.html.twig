@@ -28,14 +28,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}">My A</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="monkey-toy-32.png" style="display: inline" />MiniShift</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
+            {% if app.user %}
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            {% endif %}
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 {% if app.user %}
