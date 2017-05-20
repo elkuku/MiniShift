@@ -11,7 +11,7 @@ parameters:
     workDir: work
     webDir: web
     gitUser: git
-    sysDirs: ["admin""]
+    sysDirs: ["admin"]
 
 
 framework:
