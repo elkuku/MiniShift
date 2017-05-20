@@ -1,41 +1,80 @@
 <?php
+declare(strict_types = 1);
 
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Helper\{
+    Table, TableCell, TableSeparator
+};
+use Symfony\Component\Console\Input\{
+    InputDefinition, InputInterface, InputOption
+};
+use Symfony\Component\Console\Output\{
+    OutputInterface
+};
 
+/**
+ * Class InfoCommand
+ * @package AppBundle\Command
+ */
 class InfoCommand extends ContainerAwareCommand
 {
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
+        $format = $input->getOption('format');
+
+        $projectLister = $this->getContainer()->get('app.project_lister');
+
+        if (is_null($format)) {
+            $this->renderTable($projectLister->getProjects(), $output);
+
+            return;
+        }
+
+        switch ($format) {
+            case 'json':
+                echo json_encode($projectLister->getProjects());
+                break;
+
+            default:
+                throw new \UnexpectedValueException('Unsupported format');
+        }
+    }
+
+    /**
+     * Configures the current command.
+     */
     protected function configure()
     {
         $this
             ->setName('info')
-            ->setDescription('List projects.');
-
+            ->setDescription('List projects.')
+            ->setDefinition(
+                new InputDefinition(array(
+                    new InputOption('format', 'f', InputOption::VALUE_OPTIONAL, 'The output format'),
+                ))
+            );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param array           $projects
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
+    private function renderTable(array $projects, OutputInterface $output)
     {
-        $fs = new Filesystem();
-
         $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repoDir');
-        $workDir = $root.'/'.$this->getContainer()->getParameter('workDir');
-        $webDir = $root.'/'.$this->getContainer()->getParameter('webDir');
-        $gitUser = $this->getContainer()->getParameter('gitUser');
-
-        $tablePaths = new Table($output);
-        $tablePaths->setHeaders(
-            [
-                [new TableCell('   Paths', ['colspan' => 2])],
-            ]
-        );
+        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir');
+        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
+        $webDir = $root.'/'.$this->getContainer()->getParameter('web_dir');
 
         $tableProjects = new Table($output);
         $tableProjects->setHeaders(
@@ -45,27 +84,24 @@ class InfoCommand extends ContainerAwareCommand
             ]
         );
 
-        $host = exec('hostname');
-        $ip   = exec('hostname -I');
-
-        $directories = glob($repoDir.'/*', GLOB_ONLYDIR);
-        $projects    = [];
-
-        foreach ($directories as $directory) {
-            $projects[] = substr($fs->makePathRelative($directory, $repoDir), 0, -5);
-        }
-
         foreach ($projects as $project) {
             $tableProjects->addRow(
                 [
-                    $project.'.git',
-                    $fs->exists($workDir.'/'.$project) ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
-                    $fs->exists($webDir.'/'.$project) ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
-                    "$gitUser@$host:$repoDir/$project.git",
-                    "$gitUser@$ip:$repoDir/$project.git",
+                    $project->gitDir,
+                    $project->hasWorkDir ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
+                    $project->hasWebDir ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
+                    $project->cloneHost,
+                    $project->cloneIp,
                 ]
             );
         }
+
+        $tablePaths = new Table($output);
+        $tablePaths->setHeaders(
+            [
+                [new TableCell('   Paths', ['colspan' => 2])],
+            ]
+        );
 
         $tablePaths->addRows(
             [

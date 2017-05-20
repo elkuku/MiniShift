@@ -6,23 +6,28 @@
         <h1>Projects</h1>
         {% if app.user %}
 
-            <table>
+            <table class="table">
                 <tr>
-                    <th>Project</th>
-                    <th>Action</th>
-                    {% for project in projects %}
-                        <tr>
-                    <td><a href="/{{ project }}">{{ project }}</a></td>
-                    <td>{{ path('remove', ['name' , 'hihihidd']) }}</td>
+                    <th class="text-center">Project</th>
+                    <th class="text-center">Clone</th>
+                    <th class="text-center">Work</th>
+                    <th class="text-center">Web</th>
+                    <th class="text-center">Action</th>
                 </tr>
-                        <h4><a href="{{ project }}">{{ project }}</a></h4>
-                    {% endfor %}
-                </tr>
+                {% for project in projects %}
+                    <tr>
+                        <td><a href="/{{ project.dir }}">{{ project.dir }}</a></td>
+                        <td>{{ project.cloneHost }}<br/>{{ project.cloneIp }}</td>
+                        <td>{{ project.hasWorkDir ? 'OK' : 'MISSING' }}</td>
+                        <td>{{ project.hasWebDir ? 'OK' : 'MISSING' }}</td>
+                        <td class="text-left"><a href="{{ path('remove', {'name': project.dir}) }}">Remove</a></td>
+                    </tr>
+                {% endfor %}
             </table>
         {% else %}
-        {% for project in projects %}
-            <h4><a href="/{{ project }}">{{ project }}</a></h4>
-        {% endfor %}
+            {% for project in projects %}
+                <h4><a href="/{{ project.dir }}">{{ project.dir }}</a></h4>
+            {% endfor %}
         {% endif %}
     </div>
 {% endblock %}

@@ -18,21 +18,24 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request):  \Symfony\Component\HttpFoundation\Response
     {
+        $projects = $this->get('app.project_lister')->getProjects();
+
         $webDir = realpath($this->getParameter('kernel.root_dir').'/../web');
         $directories = glob($webDir.'/*', GLOB_ONLYDIR);
-        $projects = [];
+        $projects2 = [];
 
         foreach ($directories as $directory) {
             $dir =  str_replace($webDir.'/', '', $directory);
             if ('admin' == $dir) {
                 continue;
             }
-            $projects[] = $dir;
+            $projects2[] = $dir;
         }
 
         return $this->render('default/index.html.twig', [
+            'projects2' => $projects2,
             'projects' => $projects,
         ]);
     }

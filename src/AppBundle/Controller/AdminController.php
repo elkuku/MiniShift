@@ -4,18 +4,25 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class AdminController
+ * @package AppBundle\Controller
+ */
 class AdminController extends Controller
 {
     /**
-     * @Route("remove", name="remove")
+     * @Route("remove/{name}", name="remove")
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param string $name
+     *
+     * @return Response
      */
-    public function removeAction($name)
+    public function removeAction(string $name): Response
     {
-        var_dump($name);
-        die();
-        return $this->render('', array('name' => $name));
+        $this->addFlash('success', 'jo '.$name);
+
+        return $this->redirectToRoute('homepage');
     }
 }

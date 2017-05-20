@@ -16,6 +16,16 @@ services:
         arguments:
             - '%kernel.root_dir%'
 
+    app.project_lister:
+        class: AppBundle\Service\ProjectLister
+        arguments:
+            - '%kernel.root_dir%'
+            - '%repo_dir%'
+            - '%work_dir%'
+            - '%web_dir%'
+            - '%git_user%'
+            - '%sys_dirs%'
+
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
         public: false

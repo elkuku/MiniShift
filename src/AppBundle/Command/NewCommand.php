@@ -3,24 +3,20 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\{
+    Helper\Table, Input\InputArgument, Input\InputInterface, Output\OutputInterface, Style\SymfonyStyle
+};
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Class NewCommand
+ * @package AppBundle\Command
+ */
 class NewCommand extends ContainerAwareCommand
 {
-    protected function configure()
-    {
-        $this
-            ->setName('new')
-            ->setDescription('Create a new project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name')
-            ->addArgument('preserve', InputArgument::OPTIONAL, 'Preserve permissions');
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
@@ -28,11 +24,11 @@ class NewCommand extends ContainerAwareCommand
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repoDir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('workDir');
-        $webDir = $root.'/'.$this->getContainer()->getParameter('webDir');
-        $gitUser = $this->getContainer()->getParameter('gitUser');
+        $root    = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
+        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
+        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
+        $webDir  = $root.'/'.$this->getContainer()->getParameter('web_dir');
+        $gitUser = $this->getContainer()->getParameter('git_user');
 
         if ($fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Project exists.');
@@ -68,13 +64,27 @@ class NewCommand extends ContainerAwareCommand
         $table = new Table($output);
         $table
             ->setHeaders(['', 'Host', 'Ip'])
-            ->setRows([
-                    ['<info>Access</info>', "http://$host/$project", "http://$ip/$project",],
+            ->setRows(
+                [
+                    ['<info>Access</info>', "http://$host/$project", "http://$ip/$project"],
                     ['<info>Clone</info>', "$gitUser@$host:$repoDir", "$gitUser@$ip:$repoDir"],
-                ]);
+                ]
+            );
 
         $io->success('Project has been created.');
 
         $table->render();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('new')
+            ->setDescription('Create a new project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name')
+            ->addArgument('preserve', InputArgument::OPTIONAL, 'Preserve permissions');
     }
 }

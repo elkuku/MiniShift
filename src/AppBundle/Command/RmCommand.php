@@ -9,16 +9,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Class RmCommand
+ * @package AppBundle\Command
+ */
 class RmCommand extends ContainerAwareCommand
 {
-    protected function configure()
-    {
-        $this
-            ->setName('rm')
-            ->setDescription('Delete a project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
@@ -27,9 +26,9 @@ class RmCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repoDir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('workDir');
-        $webDir = $root.'/'.$this->getContainer()->getParameter('webDir');
+        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
+        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
+        $webDir = $root.'/'.$this->getContainer()->getParameter('web_dir');
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');
@@ -42,5 +41,16 @@ class RmCommand extends ContainerAwareCommand
         $fs->remove($webDir.'/'.$project);
 
         $io->writeln('DONE');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('rm')
+            ->setDescription('Delete a project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
     }
 }

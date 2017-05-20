@@ -7,12 +7,11 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    repoDir: repo
-    workDir: work
-    webDir: web
-    gitUser: git
-    sysDirs: ["admin"]
-
+    repo_dir: repo
+    work_dir: work
+    web_dir: web
+    git_user: git
+    sys_dirs: ["admin"]
 
 framework:
     #esi: ~

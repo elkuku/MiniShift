@@ -4,11 +4,12 @@ namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\{
+    ArrayInput, InputDefinition, InputInterface
+};
+use Symfony\Component\Console\Output\{
+    BufferedOutput, OutputInterface
+};
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InitDbCommand extends ContainerAwareCommand
@@ -31,7 +32,7 @@ class InitDbCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $path     = realpath($this->getContainer()->get('kernel')->getRootDir().'/../var');
-        $fileName = 'database.sqlitec';
+        $fileName = 'database.sqlite';
 
         if (realpath($path.'/'.$fileName)) {
             $io->text('Database exists');

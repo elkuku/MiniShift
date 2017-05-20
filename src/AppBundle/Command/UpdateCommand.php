@@ -3,22 +3,20 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\{
+    Input\InputArgument, Input\InputInterface, Output\OutputInterface, Style\SymfonyStyle
+};
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Class UpdateCommand
+ * @package AppBundle\Command
+ */
 class UpdateCommand extends ContainerAwareCommand
 {
-    protected function configure()
-    {
-        $this
-            ->setName('update')
-            ->setDescription('Update a project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
@@ -26,10 +24,10 @@ class UpdateCommand extends ContainerAwareCommand
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repoDir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('workDir').'/'.$project;
-        $webDir = $root.'/'.$this->getContainer()->getParameter('webDir').'/'.$project;
+        $root    = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
+        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
+        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir').'/'.$project;
+        $webDir  = $root.'/'.$this->getContainer()->getParameter('web_dir').'/'.$project;
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');
@@ -88,5 +86,16 @@ class UpdateCommand extends ContainerAwareCommand
         }
 
         $io->writeln('DONE');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('update')
+            ->setDescription('Update a project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
     }
 }
