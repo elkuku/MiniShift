@@ -21,6 +21,6 @@
 !/web/index.php
 
 /admin/bundles
-/admin/vendor/*
+/admin/vendor
 
 /vendor/
