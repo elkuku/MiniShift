@@ -18,12 +18,9 @@
 !/work/readme.md
 
 /web/*
-!/web/.htaccess
-!/web/app.php
-!/web/app_dev.php
-!/web/apple-touch-icon.png
-!/web/config.php
-!/web/favicon.ico
-!/web/robots.txt
+!/web/index.php
+
+/admin/bundles
+/admin/vendor/*
 
 /vendor/
