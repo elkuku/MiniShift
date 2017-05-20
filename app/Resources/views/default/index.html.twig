@@ -4,8 +4,25 @@
     <div class="text-center">
         <img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/>
         <h1>Projects</h1>
+        {% if app.user %}
+
+            <table>
+                <tr>
+                    <th>Project</th>
+                    <th>Action</th>
+                    {% for project in projects %}
+                        <tr>
+                    <td><a href="{{ project }}">{{ project }}</a></td>
+                    <td>{{ path('remove', ['name' , 'hihihidd']) }}</td>
+                </tr>
+                        <h4><a href="{{ project }}">{{ project }}</a></h4>
+                    {% endfor %}
+                </tr>
+            </table>
+        {% else %}
         {% for project in projects %}
             <h4><a href="{{ project }}">{{ project }}</a></h4>
         {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
