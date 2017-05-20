@@ -19,6 +19,7 @@
 
 /web/*
 !/web/index.php
+!/web/admin
 
 /admin/bundles
 /admin/vendor

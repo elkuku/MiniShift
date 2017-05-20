@@ -25,10 +25,12 @@ class DefaultController extends Controller
         $projects = [];
 
         foreach ($directories as $directory) {
-            $projects[] = str_replace($webDir.'/', '', $directory);
+            $dir =  str_replace($webDir.'/', '', $directory);
+            if ('admin' == $dir) {
+                continue;
+            }
+            $projects[] = $dir;
         }
-
-        $projects = array_diff($projects, $this->getParameter('sysDirs'));
 
         return $this->render('default/index.html.twig', [
             'projects' => $projects,
