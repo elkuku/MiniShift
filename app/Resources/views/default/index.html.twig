@@ -6,6 +6,12 @@
         <h1>Projects</h1>
         {% if app.user %}
 
+            <form action="{{ path('new') }}" method="post">
+                <label for="project">New</label>
+                <input id="project" name="project"/>
+                <button>Create</button>
+            </form>
+
             <table class="table">
                 <tr>
                     <th class="text-center">Project</th>
@@ -30,11 +36,6 @@
             {% if consoleOutput is defined and consoleOutput %}
                 <pre class="console">{{ consoleOutput }}</pre>
             {% endif %}
-
-            <form action="{{ path('new') }}" method="post">
-                <input name="project"/>
-                <button>Create</button>
-            </form>
 
         {% else %}
             {% for project in projects %}

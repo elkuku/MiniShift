@@ -2,8 +2,7 @@
     <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
             {% if app.user %}
-                <li><a href="#">Home</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{{ path('ssh.index') }}">SSH</a></li>
             {% endif %}
             <li><a href="{{ path('default.about') }}">About</a></li>
         </ul>

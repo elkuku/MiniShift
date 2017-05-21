@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - SSH{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        <h1>SSH</h1>
+
+        {{ dump(keys) }}
+
+        {% if consoleOutput is defined and consoleOutput %}
+            <pre class="console">{{ consoleOutput }}</pre>
+        {% endif %}
+
+        <form action="{{ path('new') }}" method="post">
+            <input name="project"/>
+            <button>Create</button>
+        </form>
+
+    </div>
+{% endblock %}
