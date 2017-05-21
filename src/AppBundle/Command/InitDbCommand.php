@@ -44,6 +44,7 @@ class InitDbCommand extends ContainerAwareCommand
 
         $io->text($this->runCommand(['command' => 'doctrine:database:create']));
         $io->text($this->runCommand(['command' => 'doctrine:schema:update', '--force' => true]));
+        $io->text($this->runCommand(['command' => 'doctrine:fixtures:load']));
     }
 
     private function runCommand(array $command, InputDefinition $definition = null)
