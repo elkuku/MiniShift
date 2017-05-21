@@ -64,7 +64,7 @@ class ProjectHandler
             $project = new \stdClass();
 
             $project->dir = substr($this->fs->makePathRelative($directory, $this->repoDir), 0, -5);
-            $project->gitDir = $project->dir.'.git';
+            $project->gitDir = $this->getRepoDirName($project->dir);
             $project->hasWorkDir = $this->fs->exists($this->workDir.'/'.$project->dir);
             $project->hasWebDir = $this->fs->exists($this->webDir.'/'.$project->dir);
             $project->cloneHost = "$this->gitUser@$host:$this->repoDir/$project->gitDir";
@@ -81,9 +81,13 @@ class ProjectHandler
      *
      * @return $this
      */
-    public function rm(string $project)
+    public function rm(string $project): ProjectHandler
     {
-        $this->fs->remove($this->repoDir.'/'.$project.'.git');
+        if (false === $this->hasRepo($project)) {
+            throw new \UnexpectedValueException('Invalid project.');
+        }
+
+        $this->fs->remove($this->repoDir.'/'.$this->getRepoDirName($project));
         $this->fs->remove($this->workDir.'/'.$project);
         $this->fs->remove($this->webDir.'/'.$project);
 
@@ -92,9 +96,21 @@ class ProjectHandler
 
     /**
      * @param string $project
+     *
+     * @return bool
      */
-    private function hasRepo(string $project)
+    private function hasRepo(string $project): bool
     {
+        return $this->fs->exists($this->repoDir.'/'.$this->getRepoDirName($project));
+    }
 
+    /**
+     * @param string $project
+     *
+     * @return string
+     */
+    private function getRepoDirName(string $project): string
+    {
+        return $project.'.git';
     }
 }

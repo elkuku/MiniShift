@@ -4,15 +4,13 @@ declare(strict_types = 1);
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Helper\{
-    Table, TableCell, TableSeparator
-};
-use Symfony\Component\Console\Input\{
-    InputDefinition, InputInterface, InputOption
-};
-use Symfony\Component\Console\Output\{
-    OutputInterface
-};
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class InfoCommand
@@ -21,7 +19,7 @@ use Symfony\Component\Console\Output\{
 class InfoCommand extends ContainerAwareCommand
 {
     /**
-     * Configures the current command.
+     * {@inheritdoc}
      */
     protected function configure()
     {
@@ -36,26 +34,23 @@ class InfoCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return void
+     * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $format = $input->getOption('format');
 
-        $projectLister = $this->getContainer()->get('app.project_lister');
+        $handler = $this->getContainer()->get('app.project_handler');
 
         if (is_null($format)) {
-            $this->renderTable($projectLister->getProjects(), $output);
+            $this->renderTable($handler->getProjects(), $output);
 
             return;
         }
 
         switch ($format) {
             case 'json':
-                echo json_encode($projectLister->getProjects());
+                echo json_encode($handler->getProjects());
                 break;
 
             default:
