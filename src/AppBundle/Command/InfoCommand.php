@@ -21,12 +21,27 @@ use Symfony\Component\Console\Output\{
 class InfoCommand extends ContainerAwareCommand
 {
     /**
+     * Configures the current command.
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('info')
+            ->setDescription('List projects.')
+            ->setDefinition(
+                new InputDefinition(array(
+                    new InputOption('format', 'f', InputOption::VALUE_OPTIONAL, 'The output format'),
+                ))
+            );
+    }
+
+    /**
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return void
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $format = $input->getOption('format');
 
@@ -46,21 +61,6 @@ class InfoCommand extends ContainerAwareCommand
             default:
                 throw new \UnexpectedValueException('Unsupported format');
         }
-    }
-
-    /**
-     * Configures the current command.
-     */
-    protected function configure()
-    {
-        $this
-            ->setName('info')
-            ->setDescription('List projects.')
-            ->setDefinition(
-                new InputDefinition(array(
-                    new InputOption('format', 'f', InputOption::VALUE_OPTIONAL, 'The output format'),
-                ))
-            );
     }
 
     /**

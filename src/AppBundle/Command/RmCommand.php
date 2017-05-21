@@ -18,7 +18,18 @@ class RmCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function configure()
+    {
+        $this
+            ->setName('rm')
+            ->setDescription('Delete a project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
 
@@ -41,16 +52,5 @@ class RmCommand extends ContainerAwareCommand
         $fs->remove($webDir.'/'.$project);
 
         $io->writeln('DONE');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this
-            ->setName('rm')
-            ->setDescription('Delete a project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
     }
 }

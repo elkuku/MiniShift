@@ -3,9 +3,11 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\{
-    Helper\Table, Input\InputArgument, Input\InputInterface, Output\OutputInterface, Style\SymfonyStyle
-};
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -17,7 +19,19 @@ class NewCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function configure()
+    {
+        $this
+            ->setName('new')
+            ->setDescription('Create a new project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name')
+            ->addArgument('preserve', InputArgument::OPTIONAL, 'Preserve permissions');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
 
@@ -74,17 +88,5 @@ class NewCommand extends ContainerAwareCommand
         $io->success('Project has been created.');
 
         $table->render();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this
-            ->setName('new')
-            ->setDescription('Create a new project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name')
-            ->addArgument('preserve', InputArgument::OPTIONAL, 'Preserve permissions');
     }
 }

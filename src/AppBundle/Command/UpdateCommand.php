@@ -3,9 +3,10 @@
 namespace AppBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\{
-    Input\InputArgument, Input\InputInterface, Output\OutputInterface, Style\SymfonyStyle
-};
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -17,7 +18,18 @@ class UpdateCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function configure()
+    {
+        $this
+            ->setName('update')
+            ->setDescription('Update a project.')
+            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
 
@@ -86,16 +98,5 @@ class UpdateCommand extends ContainerAwareCommand
         }
 
         $io->writeln('DONE');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this
-            ->setName('update')
-            ->setDescription('Update a project.')
-            ->addArgument('project', InputArgument::REQUIRED, 'The project name');
     }
 }
