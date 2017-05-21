@@ -20,7 +20,7 @@
                         <td>{{ project.cloneHost }}<br/>{{ project.cloneIp }}</td>
                         <td>{{ project.hasWorkDir ? 'OK' : 'MISSING' }}</td>
                         <td>{{ project.hasWebDir ? 'OK' : 'MISSING' }}</td>
-                        <td class="text-left"><a href="{{ path('remove', {'name': project.dir}) }}">Remove</a></td>
+                        <td class="text-left"><a href="{{ path('remove', {'project': project.dir}) }}">Remove</a></td>
                     </tr>
                 {% endfor %}
             </table>
