@@ -14,12 +14,17 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class ProjectLister
  * @package AppBundle\Service
  */
-class ProjectLister
+class ProjectHandler
 {
     private $repoDir = '';
     private $workDir = '';
     private $webDir = '';
     private $gitUser = '';
+
+    /**
+     * @var Filesystem
+     */
+    private $fs;
 
     /**
      * ProjectLister constructor.
@@ -30,7 +35,7 @@ class ProjectLister
      * @param string $webDir
      * @param string $gitUser
      */
-    public function __construct($rootDir, $repoDir, $workDir, $webDir, $gitUser)
+    public function __construct(string $rootDir, string $repoDir, string $workDir, string $webDir, string $gitUser)
     {
         $root = realpath($rootDir.'/..');
 
@@ -38,6 +43,8 @@ class ProjectLister
         $this->workDir = $root.'/'.$workDir;
         $this->webDir = $root.'/'.$webDir;
         $this->gitUser = $gitUser;
+
+        $this->fs = new FileSystem();
     }
 
     /**
@@ -47,8 +54,6 @@ class ProjectLister
      */
     public function getProjects(): array
     {
-        $fs = new Filesystem();
-
         $host = exec('hostname');
         $ip   = exec('hostname -I');
 
@@ -58,10 +63,10 @@ class ProjectLister
         foreach ($directories as $directory) {
             $project = new \stdClass();
 
-            $project->dir = substr($fs->makePathRelative($directory, $this->repoDir), 0, -5);
+            $project->dir = substr($this->fs->makePathRelative($directory, $this->repoDir), 0, -5);
             $project->gitDir = $project->dir.'.git';
-            $project->hasWorkDir = $fs->exists($this->workDir.'/'.$project->dir);
-            $project->hasWebDir = $fs->exists($this->webDir.'/'.$project->dir);
+            $project->hasWorkDir = $this->fs->exists($this->workDir.'/'.$project->dir);
+            $project->hasWebDir = $this->fs->exists($this->webDir.'/'.$project->dir);
             $project->cloneHost = "$this->gitUser@$host:$this->repoDir/$project->gitDir";
             $project->cloneIp = "$this->gitUser@$ip:$this->repoDir/$project->gitDir";
 
@@ -69,5 +74,27 @@ class ProjectLister
         }
 
         return $projects;
+    }
+
+    /**
+     * @param string $project
+     *
+     * @return $this
+     */
+    public function rm(string $project)
+    {
+        $this->fs->remove($this->repoDir.'/'.$project.'.git');
+        $this->fs->remove($this->workDir.'/'.$project);
+        $this->fs->remove($this->webDir.'/'.$project);
+
+        return $this;
+    }
+
+    /**
+     * @param string $project
+     */
+    private function hasRepo(string $project)
+    {
+
     }
 }
