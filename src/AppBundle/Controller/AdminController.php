@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -18,6 +19,7 @@ class AdminController extends Controller
 {
     /**
      * @Route("remove/{project}", name="remove")
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @param string $project
      *
@@ -37,6 +39,7 @@ class AdminController extends Controller
 
     /**
      * @Route("new", name="new")
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @param Request $request
      *

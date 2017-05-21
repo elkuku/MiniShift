@@ -16,6 +16,11 @@ services:
         arguments:
             - '%kernel.root_dir%'
 
+    app.ssh_handler:
+        class: AppBundle\Service\SshHandler
+        arguments:
+            - '%git_user%'
+
     app.project_handler:
         class: AppBundle\Service\ProjectHandler
         arguments:
