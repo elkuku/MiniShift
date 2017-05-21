@@ -16,8 +16,8 @@ services:
         arguments:
             - '%kernel.root_dir%'
 
-    app.project_lister:
-        class: AppBundle\Service\ProjectLister
+    app.project_handler:
+        class: AppBundle\Service\ProjectHandler
         arguments:
             - '%kernel.root_dir%'
             - '%repo_dir%'
