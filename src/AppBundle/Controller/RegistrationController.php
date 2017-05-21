@@ -23,7 +23,7 @@ class RegistrationController extends Controller
 {
     /**
      * @Route("/register", name="register")
-     * @Security("has_role('ROLE_USER')")
+     * @Security("has_role('ROLE_ADMIN')")
      *
      * @param Request $request
      *
