@@ -13,15 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminController extends Controller
 {
     /**
-     * @Route("remove/{name}", name="remove")
+     * @Route("remove/{project}", name="remove")
      *
-     * @param string $name
+     * @param string $project
      *
      * @return Response
      */
-    public function removeAction(string $name): Response
+    public function removeAction(string $project): Response
     {
-        $this->addFlash('success', 'jo '.$name);
+        try {
+            $this->get('app.project_handler')->rm($project);
+            $this->addFlash('success', sprintf('Project %s has been removed.', $project));
+
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+        }
 
         return $this->redirectToRoute('homepage');
     }
