@@ -3,19 +3,37 @@
 {% block title %}{{ parent() }} - SSH{% endblock %}
 
 {% block body %}
+    <div class="row text-center">
+        <div class="col-xs-1"><img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/></div>
+        <div class="col-xs-3"><h1>SSH</h1></div>
+        <div class="col-xs-8">
+            <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
+                <label for="key">New</label>
+                <textarea id="key" name="key"></textarea>
+                <button class="btn btn-default">Add</button>
+            </form>
+        </div>
+    </div>
     <div class="text-center">
-        <h1>SSH</h1>
-
-        {{ dump(keys) }}
-
-        {% if consoleOutput is defined and consoleOutput %}
-            <pre class="console">{{ consoleOutput }}</pre>
+        {% if keys %}
+            <table class="table table-condensed">
+                <tr>
+                    <th class="text-center">Type</th>
+                    <th class="text-center">Key</th>
+                    <th class="text-center">Comment</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                {% for key in keys %}
+                    <tr>
+                        <td>{{ key.type }}</td>
+                        <td title="{{ key.key|raw }}">{{ key.key[:16] }}</td>
+                        <td>{{ key.comment }}</td>
+                        <td>Delete</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="alert alert-warning">No keys defined</div>
         {% endif %}
-
-        <form action="{{ path('new') }}" method="post">
-            <input name="project"/>
-            <button>Create</button>
-        </form>
-
     </div>
 {% endblock %}

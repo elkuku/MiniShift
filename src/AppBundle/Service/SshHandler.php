@@ -16,6 +16,8 @@ use Pagemachine\AuthorizedKeys\AuthorizedKeys;
  */
 class SshHandler extends AuthorizedKeys
 {
+    private $path = '';
+
     /**
      * SshHandler constructor.
      *
@@ -23,10 +25,18 @@ class SshHandler extends AuthorizedKeys
      */
     public function __construct(string $gitUser)
     {
-        $path = "/home/$gitUser/.ssh/authorized_keys";
+        $this->path = "/home/$gitUser/.ssh/authorized_keys";
 
-        $content = (file_exists($path)) ? file_get_contents($path) : null;
+        $content = (file_exists($this->path)) ? file_get_contents($this->path) : null;
 
         parent::__construct($content);
+    }
+
+    /**
+     * Save to disk.
+     */
+    public function save()
+    {
+        $this->toFile($this->path);
     }
 }

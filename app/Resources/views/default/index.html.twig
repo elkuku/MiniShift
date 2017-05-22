@@ -1,17 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="row text-center">
+        <div class="col-xs-1"><img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/></div>
+        <div class="col-xs-3"><h1>Projects</h1></div>
+        <div class="col-xs-8">
+            {% if app.user %}
+                <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
+                    <label for="key">New</label>
+                    <textarea id="key" name="key"></textarea>
+                    <button class="btn btn-default">Add</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
     <div class="text-center">
-        <img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/>
-        <h1>Projects</h1>
         {% if app.user %}
-
-            <form action="{{ path('new') }}" method="post">
-                <label for="project">New</label>
-                <input id="project" name="project"/>
-                <button>Create</button>
-            </form>
-
             <table class="table">
                 <tr>
                     <th class="text-center">Project</th>
