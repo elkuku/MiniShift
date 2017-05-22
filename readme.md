@@ -1,4 +1,4 @@
-# MiniShift ![monkey-toy-64-118729](https://cloud.githubusercontent.com/assets/33978/26260020/4ca62144-3c91-11e7-893b-faac97966f65.png)
+# ![monkey-toy-64-118729](https://cloud.githubusercontent.com/assets/33978/26260020/4ca62144-3c91-11e7-893b-faac97966f65.png) MiniShift
 
 Inspired by [OpenShift](https://www.openshift.com/)
 
