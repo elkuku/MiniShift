@@ -5,17 +5,33 @@
 {% block body %}
     <div class="row text-center">
         <div class="col-xs-1"><img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/></div>
-        <div class="col-xs-3"><h1>SSH</h1></div>
-        <div class="col-xs-8">
-            <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
+        <div class="col-xs-1"><h1>SSH</h1></div>
+        <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
+            <div class="col-xs-1">
                 <label for="key">New</label>
-                <textarea id="key" name="key"></textarea>
+            </div>
+            <div class="col-xs-3">
+                <textarea id="key" name="key" class="col-sm-12" required="required"></textarea>
+            </div>
+            <div class="col-xs-1">
                 <button class="btn btn-default">Add</button>
-            </form>
-        </div>
+            </div>
+        </form>
+        <form enctype="multipart/form-data" method="post" class="form form-inline"
+              action="{{ path('ssh.add-file') }}">
+            <div class="col-xs-1">
+                <label for="key">New</label>
+            </div>
+            <div class="col-xs-3">
+                <input name="key_file" type="file" class="form-control" required="required"/>
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-default">Add</button>
+            </div>
+        </form>
     </div>
     <div class="text-center">
-        {% if keys %}
+        {% if keys and keys|length %}
             <table class="table table-condensed">
                 <tr>
                     <th class="text-center">Type</th>
@@ -26,9 +42,9 @@
                 {% for key in keys %}
                     <tr>
                         <td>{{ key.type }}</td>
-                        <td title="{{ key.key|raw }}">{{ key.key[:16] }}</td>
+                        <td title="{{ key.key|raw }}" style="cursor: help">{{ key.key[:16] }}....</td>
                         <td>{{ key.comment }}</td>
-                        <td>Delete</td>
+                        <td><a href="{{ path('ssh.remove', {'comment': key.comment}) }}"> Remove </a></td>
                     </tr>
                 {% endfor %}
             </table>
