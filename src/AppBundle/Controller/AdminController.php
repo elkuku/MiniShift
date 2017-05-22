@@ -55,6 +55,7 @@ class AdminController extends Controller
             $output = '';
         } else {
             $output = $this->runCommand(['command' => 'new', 'project' => $project]);
+            $this->addFlash('success', sprintf('Project %s has been created.', $project));
         }
 
         return $this->render(
