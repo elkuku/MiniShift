@@ -30,18 +30,15 @@ class ProjectHandler
      * ProjectLister constructor.
      *
      * @param string $rootDir
-     * @param string $repoDir
-     * @param string $workDir
-     * @param string $webDir
      * @param string $gitUser
      */
-    public function __construct(string $rootDir, string $repoDir, string $workDir, string $webDir, string $gitUser)
+    public function __construct(string $rootDir, string $gitUser)
     {
         $root = realpath($rootDir.'/..');
 
-        $this->repoDir = $root.'/'.$repoDir;
-        $this->workDir = $root.'/'.$workDir;
-        $this->webDir = $root.'/'.$webDir;
+        $this->repoDir = $root.'/repo';
+        $this->workDir = $root.'/work';
+        $this->webDir  = $root.'/web';
         $this->gitUser = $gitUser;
 
         $this->fs = new FileSystem();
@@ -57,21 +54,32 @@ class ProjectHandler
         $host = exec('hostname');
         $ip   = exec('hostname -I');
 
-        $directories = glob($this->repoDir.'/*', GLOB_ONLYDIR);
-        $projects    = [];
+        $projects = [];
 
-        foreach ($directories as $directory) {
+        foreach (new \DirectoryIterator($this->repoDir) as $iterator) {
+            if ($iterator->isDot() || false == $iterator->isDir()) {
+                continue;
+            }
+
+            $directory = $iterator->getBasename();
+
+            if (0 === strpos($directory, '.')) {
+                continue;
+            }
+
             $project = new \stdClass();
 
-            $project->dir = substr($this->fs->makePathRelative($directory, $this->repoDir), 0, -5);
-            $project->gitDir = $this->getRepoDirName($project->dir);
+            $project->dir        = substr($iterator->getBasename(), 0, -4);
+            $project->gitDir     = $this->getRepoDirName($project->dir);
             $project->hasWorkDir = $this->fs->exists($this->workDir.'/'.$project->dir);
-            $project->hasWebDir = $this->fs->exists($this->webDir.'/'.$project->dir);
-            $project->cloneHost = "$this->gitUser@$host:$this->repoDir/$project->gitDir";
-            $project->cloneIp = "$this->gitUser@$ip:$this->repoDir/$project->gitDir";
+            $project->hasWebDir  = $this->fs->exists($this->webDir.'/'.$project->dir);
+            $project->cloneHost  = "$this->gitUser@$host:$this->repoDir/$project->gitDir";
+            $project->cloneIp    = "$this->gitUser@$ip:$this->repoDir/$project->gitDir";
 
-            $projects[] = $project;
+            $projects[$project->dir] = $project;
         }
+
+        ksort($projects);
 
         return $projects;
     }

@@ -7,11 +7,6 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    repo_dir: repo
-    work_dir: work
-    web_dir: web
-    git_user: git
-    sys_dirs: ["admin"]
 
 framework:
     #esi: ~
@@ -49,17 +44,9 @@ doctrine:
     dbal:
         driver: pdo_sqlite
         charset: UTF8
-        path: '%kernel.root_dir%/../var/database.sqlite'
+        path: '%database_path%'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-
-# Swiftmailer Configuration
-swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    password: '%mailer_password%'
-    spool: { type: memory }

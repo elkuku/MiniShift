@@ -23,13 +23,7 @@ services:
 
     app.project_handler:
         class: AppBundle\Service\ProjectHandler
-        arguments:
-            - '%kernel.root_dir%'
-            - '%repo_dir%'
-            - '%work_dir%'
-            - '%web_dir%'
-            - '%git_user%'
-            - '%sys_dirs%'
+        arguments: ['%kernel.root_dir%', '%git_user%']
 
     app.twig_extension:
         class: AppBundle\Twig\AppExtension
