@@ -6,7 +6,8 @@
         <div class="col-xs-3"><h1>Projects</h1></div>
         <div class="col-xs-8">
             {% if app.user %}
-                <form action="{{ path('new') }}" method="post" class="form-inline">
+                <div class="btn btn-success btn-lg" onclick="$(this).hide();$('#new').fadeIn()"><strong>+</strong></div>
+                <form action="{{ path('new') }}" method="post" class="form-inline" id="new" style="display: none">
                     <div class="form-group">
                         <label for="project">New</label>
                         <input id="project" name="project" required="required"/>
