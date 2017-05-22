@@ -6,9 +6,11 @@
         <div class="col-xs-3"><h1>Projects</h1></div>
         <div class="col-xs-8">
             {% if app.user %}
-                <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
-                    <label for="key">New</label>
-                    <textarea id="key" name="key"></textarea>
+                <form action="{{ path('new') }}" method="post" class="form-inline">
+                    <div class="form-group">
+                        <label for="project">New</label>
+                        <input id="project" name="project"/>
+                    </div>
                     <button class="btn btn-default">Add</button>
                 </form>
             {% endif %}
