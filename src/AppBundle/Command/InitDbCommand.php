@@ -23,7 +23,7 @@ class InitDbCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:init-db')
+            ->setName('initdb')
             ->setDescription('Set up the database');
     }
 
@@ -34,10 +34,9 @@ class InitDbCommand extends ContainerAwareCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $path     = realpath($this->getContainer()->get('kernel')->getRootDir().'/../var');
-        $fileName = 'database.sqlite';
+        $dbPath = $this->getContainer()->getParameter('database_path');
 
-        if (realpath($path.'/'.$fileName)) {
+        if (file_exists($dbPath)) {
             $io->text('Database exists');
 
             return;
@@ -47,19 +46,17 @@ class InitDbCommand extends ContainerAwareCommand
 
         $io->text($this->runCommand(['command' => 'doctrine:database:create']));
         $io->text($this->runCommand(['command' => 'doctrine:schema:update', '--force' => true]));
-        $io->text($this->runCommand(['command' => 'doctrine:fixtures:load']));
+        $io->text($this->runCommand(['command' => 'doctrine:fixtures:load', '--append' => true]));
     }
 
     private function runCommand(array $command, InputDefinition $definition = null)
     {
-        $kernel = $this->getContainer()->get('kernel');
-        $application = new Application($kernel);
+        $application = new Application($this->getContainer()->get('kernel'));
         $application->setAutoExit(false);
 
-        $input = new ArrayInput($command, $definition);
         $output = new BufferedOutput();
 
-        $application->run($input, $output);
+        $application->run(new ArrayInput($command, $definition), $output);
 
         return $output->fetch();
     }

@@ -66,23 +66,18 @@ class InfoCommand extends ContainerAwareCommand
      */
     private function renderTable(array $projects, OutputInterface $output)
     {
-        $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir');
-        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
-        $webDir = $root.'/'.$this->getContainer()->getParameter('web_dir');
-
         $tableProjects = new Table($output);
         $tableProjects->setHeaders(
             [
                 [new TableCell('   Projects', ['colspan' => 5])],
-                ['Repo', 'Work', 'Web', 'Clone Host', 'Clone IP'],
+                ['Project', 'Work', 'Web', 'Clone Host', 'Clone IP'],
             ]
         );
 
         foreach ($projects as $project) {
             $tableProjects->addRow(
                 [
-                    $project->gitDir,
+                    $project->dir,
                     $project->hasWorkDir ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
                     $project->hasWebDir ? '<bg=green;fg=black> OK </>' : '<error> NO </error>',
                     $project->cloneHost,
@@ -91,24 +86,6 @@ class InfoCommand extends ContainerAwareCommand
             );
         }
 
-        $tablePaths = new Table($output);
-        $tablePaths->setHeaders(
-            [
-                [new TableCell('   Paths', ['colspan' => 2])],
-            ]
-        );
-
-        $tablePaths->addRows(
-            [
-                ['<info>Root</info>', $root],
-                new TableSeparator(),
-                ['<info>Repo</info>', $repoDir],
-                ['<info>Work</info>', $workDir],
-                ['<info>Web</info>', $webDir],
-            ]
-        );
-
         $tableProjects->render();
-        $tablePaths->render();
     }
 }

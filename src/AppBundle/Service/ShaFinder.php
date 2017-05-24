@@ -19,12 +19,10 @@ class ShaFinder
     /**
      * ShaFinder constructor.
      *
-     * @param string $rootDir
+     * @param string $dir
      */
-    public function __construct($rootDir)
+    public function __construct($dir)
     {
-        $dir = realpath($rootDir.'/..');
-
         if (file_exists($dir.'/sha.txt')) {
             $this->sha = file_get_contents($dir.'/sha.txt');
         } elseif (file_exists($dir.'/.git/refs/heads/master')) {

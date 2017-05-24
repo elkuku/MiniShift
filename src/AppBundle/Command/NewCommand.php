@@ -34,15 +34,15 @@ class NewCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
+        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root    = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
-        $webDir  = $root.'/'.$this->getContainer()->getParameter('web_dir');
-        $gitUser = $this->getContainer()->getParameter('git_user');
+        $root    = $handler->getRoot();
+        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
+        $workDir = $handler->getWorkDir();
+        $gitUser = $handler->getGitUser();
 
         if ($fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Project exists.');
@@ -70,7 +70,7 @@ class NewCommand extends ContainerAwareCommand
         }
 
         $io->section('Creating symlink in web dir');
-        $fs->symlink($workDir.'/'.$project, $webDir.'/'.$project);
+        $fs->symlink($workDir.'/'.$project, $handler->getWebDir().'/'.$project);
 
         $host = exec('hostname');
         $ip   = exec('hostname -I');

@@ -32,14 +32,12 @@ class RmCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
+        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir');
-        $webDir = $root.'/'.$this->getContainer()->getParameter('web_dir');
+        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');
@@ -48,8 +46,8 @@ class RmCommand extends ContainerAwareCommand
         $io->title('Deleting project '.$project);
 
         $fs->remove($repoDir);
-        $fs->remove($workDir.'/'.$project);
-        $fs->remove($webDir.'/'.$project);
+        $fs->remove($handler->getWorkDir().'/'.$project);
+        $fs->remove($handler->getWebDir().'/'.$project);
 
         $io->writeln('DONE');
     }

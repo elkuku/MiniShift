@@ -32,14 +32,14 @@ class UpdateCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
+        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root    = realpath($this->getContainer()->get('kernel')->getRootDir().'/..');
-        $repoDir = $root.'/'.$this->getContainer()->getParameter('repo_dir').'/'.$project.'.git';
-        $workDir = $root.'/'.$this->getContainer()->getParameter('work_dir').'/'.$project;
-        $webDir  = $root.'/'.$this->getContainer()->getParameter('web_dir').'/'.$project;
+        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
+        $workDir = $handler->getWorkDir().'/'.$project;
+        $webDir  = $handler->getWebDir().'/'.$project;
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');

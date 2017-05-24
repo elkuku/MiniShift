@@ -16,6 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ProjectHandler
 {
+    private $root = '';
     private $repoDir = '';
     private $workDir = '';
     private $webDir = '';
@@ -29,13 +30,12 @@ class ProjectHandler
     /**
      * ProjectLister constructor.
      *
-     * @param string $rootDir
+     * @param string $root
      * @param string $gitUser
      */
-    public function __construct(string $rootDir, string $gitUser)
+    public function __construct(string $root, string $gitUser)
     {
-        $root = realpath($rootDir.'/..');
-
+        $this->root    = $root;
         $this->repoDir = $root.'/repo';
         $this->workDir = $root.'/work';
         $this->webDir  = $root.'/web';
@@ -103,13 +103,43 @@ class ProjectHandler
     }
 
     /**
-     * @param string $project
-     *
-     * @return bool
+     * @return string
      */
-    private function hasRepo(string $project): bool
+    public function getRoot(): string
     {
-        return $this->fs->exists($this->repoDir.'/'.$this->getRepoDirName($project));
+        return $this->root;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRepoDir(): string
+    {
+        return $this->repoDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkDir(): string
+    {
+        return $this->workDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebDir(): string
+    {
+        return $this->webDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGitUser(): string
+    {
+        return $this->gitUser;
     }
 
     /**
@@ -117,8 +147,18 @@ class ProjectHandler
      *
      * @return string
      */
-    private function getRepoDirName(string $project): string
+    public function getRepoDirName(string $project): string
     {
         return $project.'.git';
+    }
+
+    /**
+     * @param string $project
+     *
+     * @return bool
+     */
+    private function hasRepo(string $project): bool
+    {
+        return $this->fs->exists($this->repoDir.'/'.$this->getRepoDirName($project));
     }
 }

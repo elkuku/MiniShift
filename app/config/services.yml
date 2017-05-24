@@ -23,7 +23,7 @@ services:
     app.sha_finder:
         class: AppBundle\Service\ShaFinder
         arguments:
-            - '%kernel.root_dir%'
+            - '%kernel.project_dir%'
 
     app.ssh_handler:
         class: AppBundle\Service\SshHandler
@@ -33,7 +33,7 @@ services:
 
     app.project_handler:
         class: AppBundle\Service\ProjectHandler
-        arguments: ['%kernel.root_dir%', '%git_user%']
+        arguments: ['%kernel.project_dir%', '%git_user%']
         public: true
 
     app.twig_extension:
