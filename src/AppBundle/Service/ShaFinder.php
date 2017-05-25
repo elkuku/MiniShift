@@ -19,14 +19,14 @@ class ShaFinder
     /**
      * ShaFinder constructor.
      *
-     * @param string $dir
+     * @param string $root
      */
-    public function __construct($dir)
+    public function __construct(string $root)
     {
-        if (file_exists($dir.'/sha.txt')) {
-            $this->sha = file_get_contents($dir.'/sha.txt');
-        } elseif (file_exists($dir.'/.git/refs/heads/master')) {
-            $this->sha = file_get_contents($dir.'/.git/refs/heads/master');
+        if (file_exists($root.'/sha.txt')) {
+            $this->sha = file_get_contents($root.'/sha.txt');
+        } elseif (file_exists($root.'/.git/refs/heads/master')) {
+            $this->sha = file_get_contents($root.'/.git/refs/heads/master');
         }
     }
 
@@ -35,7 +35,7 @@ class ShaFinder
      *
      * @return string
      */
-    public function getSha()
+    public function getSha(): string
     {
         return $this->sha;
     }

@@ -22,20 +22,21 @@ services:
 
     AppBundle\Command\:
         resource: '%kernel.project_dir%/src/AppBundle/Command'
-        public: true
         tags: ['controller.service_arguments']
 
     AppBundle\Security\FormLoginAuthenticator:
 
     AppBundle\Service\ShaFinder:
         arguments:
-            - '%kernel.project_dir%'
+            $root: '%kernel.project_dir%'
 
     AppBundle\Service\SshHandler:
         arguments:
-            - '%git_user%'
+            $gitUser: '%git_user%'
 
     AppBundle\Service\ProjectHandler:
-        arguments: ['%kernel.project_dir%', '%git_user%']
+        arguments:
+            $root: '%kernel.project_dir%'
+            $gitUser: '%git_user%'
 
     AppBundle\Twig\AppExtension:
