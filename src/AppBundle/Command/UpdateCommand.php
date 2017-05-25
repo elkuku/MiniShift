@@ -87,11 +87,14 @@ class UpdateCommand extends ContainerAwareCommand
 
         if ($fs->exists($workDir.'/composer.json')) {
             $io->section('Executing composer install');
+            // @codingStandardsIgnoreStart
+            // Concat operator must not be surrounded by spaces...
             echo shell_exec(
                 "export SYMFONY_ENV=prod;"
                 ."cd $workDir;"
                 ."composer install --no-progress --no-dev --optimize-autoloader"
             );
+            // @codingStandardsIgnoreEnd
         }
 
         if ($fs->exists($workDir.'/bower.json')) {

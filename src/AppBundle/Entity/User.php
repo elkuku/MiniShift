@@ -46,62 +46,112 @@ class User implements UserInterface
      */
     protected $password;
 
+    /**
+     * {@inheritdoc}
+     */
     public function eraseCredentials()
     {
         return null;
     }
 
-    public function getRole()
+    /**
+     * @return string
+     */
+    public function getRole(): string
     {
         return $this->role;
     }
 
-    public function setRole($role = null)
+    /**
+     * @param string|null $role
+     *
+     * @return User
+     */
+    public function setRole(string $role = null): User
     {
         $this->role = $role;
+
+        return $this;
     }
 
-    public function getRoles()
+    /**
+     * @return array
+     */
+    public function getRoles(): array
     {
         return [$this->getRole()];
     }
 
-    public function getId()
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUserName()
+    /**
+     * @return string
+     */
+    public function getUserName(): string
     {
         return $this->userName;
     }
 
-    public function getPassword()
+    /**
+     * @return string
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    /**
+     * @param string $password
+     *
+     * @return User
+     */
+    public function setPassword(string $password): User
     {
         $this->password = $password;
+
+        return $this;
     }
 
-    public function getPlainPassword()
+    /**
+     * @return string
+     */
+    public function getPlainPassword(): string
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($plainPassword)
+    /**
+     * @param string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword(string $plainPassword): User
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
     }
 
+    /**
+     * @return null
+     */
     public function getSalt()
     {
         return null;
     }
 
-    public function setUserName($userName)
+    /**
+     * @param string $userName
+     *
+     * @return User
+     */
+    public function setUserName(string $userName): User
     {
         $this->userName = $userName;
 

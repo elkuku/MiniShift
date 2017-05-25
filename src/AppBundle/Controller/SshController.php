@@ -79,9 +79,7 @@ class SshController extends Controller
                 $this->addFlash('danger', 'Invalid key file!');
             } else {
                 try {
-                    $key = file_get_contents($path);
-                    $publicKey = new PublicKey($key);
-                    $handler->addKey($publicKey);
+                    $handler->addKey(new PublicKey(file_get_contents($path)));
                     $handler->save();
                     $this->addFlash('success', 'The key hs been added');
                 } catch (\Exception $exception) {

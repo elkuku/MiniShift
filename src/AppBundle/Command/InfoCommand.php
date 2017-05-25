@@ -46,9 +46,7 @@ class InfoCommand extends ContainerAwareCommand
             ->setName('info')
             ->setDescription('List projects.')
             ->setDefinition(
-                new InputDefinition(array(
-                    new InputOption('format', 'f', InputOption::VALUE_OPTIONAL, 'The output format'),
-                ))
+                new InputDefinition([new InputOption('format', 'f', InputOption::VALUE_OPTIONAL, 'The output format')])
             );
     }
 

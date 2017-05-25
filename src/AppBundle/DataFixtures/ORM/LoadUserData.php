@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -18,19 +19,26 @@ class LoadUserData implements FixtureInterface, ContainerAwareInterface
      */
     private $container;
 
+    /**
+     * {@inheritdoc}
+     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load(ObjectManager $manager)
     {
         $user = new User();
         $user->setUsername('admin');
         //$user->setSalt(md5(uniqid()));
 
-        $encoder = $this->container->get('security.password_encoder');
+        $encoder  = $this->container->get('security.password_encoder');
         $password = $encoder->encodePassword($user, 'test');
+
         $user->setPassword($password);
         $user->setRole('ROLE_ADMIN');
 
