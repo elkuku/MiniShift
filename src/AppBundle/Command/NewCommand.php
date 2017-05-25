@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Service\ProjectHandler;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,6 +17,24 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class NewCommand extends ContainerAwareCommand
 {
+    /**
+     * @var ProjectHandler
+     */
+    private $handler;
+
+    /**
+     * InfoCommand constructor.
+     *
+     * @param ProjectHandler $handler
+     * @param null           $name
+     */
+    public function __construct(ProjectHandler $handler, $name = null)
+    {
+        $this->handler = $handler;
+
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,15 +53,14 @@ class NewCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
-        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $root    = $handler->getRoot();
-        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
-        $workDir = $handler->getWorkDir();
-        $gitUser = $handler->getGitUser();
+        $root    = $this->handler->getRoot();
+        $repoDir = $this->handler->getRepoDir().'/'.$this->handler->getRepoDirName($project);
+        $workDir = $this->handler->getWorkDir();
+        $gitUser = $this->handler->getGitUser();
 
         if ($fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Project exists.');
@@ -70,7 +88,7 @@ class NewCommand extends ContainerAwareCommand
         }
 
         $io->section('Creating symlink in web dir');
-        $fs->symlink($workDir.'/'.$project, $handler->getWebDir().'/'.$project);
+        $fs->symlink($workDir.'/'.$project, $this->handler->getWebDir().'/'.$project);
 
         $host = exec('hostname');
         $ip   = exec('hostname -I');

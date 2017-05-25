@@ -3,10 +3,11 @@ declare(strict_types = 1);
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Project;
+use AppBundle\Service\ProjectHandler;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableCell;
-use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -18,6 +19,24 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InfoCommand extends ContainerAwareCommand
 {
+    /**
+     * @var ProjectHandler
+     */
+    private $handler;
+
+    /**
+     * InfoCommand constructor.
+     *
+     * @param ProjectHandler $handler
+     * @param null           $name
+     */
+    public function __construct(ProjectHandler $handler, $name = null)
+    {
+        $this->handler = $handler;
+
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -40,17 +59,15 @@ class InfoCommand extends ContainerAwareCommand
     {
         $format = $input->getOption('format');
 
-        $handler = $this->getContainer()->get('app.project_handler');
-
         if (is_null($format)) {
-            $this->renderTable($handler->getProjects(), $output);
+            $this->renderTable($this->handler->getProjects(), $output);
 
             return;
         }
 
         switch ($format) {
             case 'json':
-                echo json_encode($handler->getProjects());
+                echo json_encode($this->handler->getProjects());
                 break;
 
             default:
@@ -59,7 +76,7 @@ class InfoCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param array           $projects
+     * @param Project[]       $projects
      * @param OutputInterface $output
      *
      * @return void

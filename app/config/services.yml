@@ -14,27 +14,29 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    #service_name:
-    #    class: AppBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
-    app.form_login_authenticator:
-        class: AppBundle\Security\FormLoginAuthenticator
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    AppBundle\Controller\:
+        resource: '../../src/AppBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
 
-    app.sha_finder:
-        class: AppBundle\Service\ShaFinder
+    AppBundle\Command\:
+        resource: '../../src/AppBundle/Command'
+        public: true
+        tags: ['controller.service_arguments']
+
+    AppBundle\Security\FormLoginAuthenticator:
+
+    AppBundle\Service\ShaFinder:
         arguments:
             - '%kernel.project_dir%'
 
-    app.ssh_handler:
-        class: AppBundle\Service\SshHandler
+    AppBundle\Service\SshHandler:
         arguments:
             - '%git_user%'
-        public: true
 
-    app.project_handler:
-        class: AppBundle\Service\ProjectHandler
+    AppBundle\Service\ProjectHandler:
         arguments: ['%kernel.project_dir%', '%git_user%']
-        public: true
 
-    app.twig_extension:
-        class: AppBundle\Twig\AppExtension
+    AppBundle\Twig\AppExtension:

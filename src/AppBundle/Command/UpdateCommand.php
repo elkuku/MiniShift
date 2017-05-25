@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Service\ProjectHandler;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,24 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class UpdateCommand extends ContainerAwareCommand
 {
+    /**
+     * @var ProjectHandler
+     */
+    private $handler;
+
+    /**
+     * InfoCommand constructor.
+     *
+     * @param ProjectHandler $handler
+     * @param null           $name
+     */
+    public function __construct(ProjectHandler $handler, $name = null)
+    {
+        $this->handler = $handler;
+
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,14 +51,13 @@ class UpdateCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
-        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
-        $workDir = $handler->getWorkDir().'/'.$project;
-        $webDir  = $handler->getWebDir().'/'.$project;
+        $repoDir = $this->handler->getRepoDir().'/'.$this->handler->getRepoDirName($project);
+        $workDir = $this->handler->getWorkDir().'/'.$project;
+        $webDir  = $this->handler->getWebDir().'/'.$project;
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');

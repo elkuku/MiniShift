@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use AppBundle\Service\ProjectHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +15,15 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      *
+     * @param ProjectHandler $handler
+     *
      * @return Response
      */
-    public function indexAction(): Response
+    public function indexAction(ProjectHandler $handler): Response
     {
         return $this->render(
             'default/index.html.twig',
-            ['projects' => $this->get('app.project_handler')->getProjects()]
+            ['projects' => $handler->getProjects()]
         );
     }
 

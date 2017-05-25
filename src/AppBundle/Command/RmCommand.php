@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Service\ProjectHandler;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,24 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class RmCommand extends ContainerAwareCommand
 {
+    /**
+     * @var ProjectHandler
+     */
+    private $handler;
+
+    /**
+     * InfoCommand constructor.
+     *
+     * @param ProjectHandler $handler
+     * @param null           $name
+     */
+    public function __construct(ProjectHandler $handler, $name = null)
+    {
+        $this->handler = $handler;
+
+        parent::__construct($name);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,12 +51,11 @@ class RmCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $project = $input->getArgument('project');
-        $handler = $this->getContainer()->get('app.project_handler');
 
         $fs = new Filesystem();
         $io = new SymfonyStyle($input, $output);
 
-        $repoDir = $handler->getRepoDir().'/'.$handler->getRepoDirName($project);
+        $repoDir = $this->handler->getRepoDir().'/'.$this->handler->getRepoDirName($project);
 
         if (false == $fs->exists($repoDir)) {
             throw new \UnexpectedValueException('Invalid project.');
@@ -46,8 +64,8 @@ class RmCommand extends ContainerAwareCommand
         $io->title('Deleting project '.$project);
 
         $fs->remove($repoDir);
-        $fs->remove($handler->getWorkDir().'/'.$project);
-        $fs->remove($handler->getWebDir().'/'.$project);
+        $fs->remove($this->handler->getWorkDir().'/'.$project);
+        $fs->remove($this->handler->getWebDir().'/'.$project);
 
         $io->writeln('DONE');
     }

@@ -8,6 +8,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Project;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -47,7 +48,7 @@ class ProjectHandler
     /**
      * Get the projects list.
      *
-     * @return array
+     * @return Project[]
      */
     public function getProjects(): array
     {
@@ -67,7 +68,7 @@ class ProjectHandler
                 continue;
             }
 
-            $project = new \stdClass();
+            $project = new Project();
 
             $project->dir        = substr($iterator->getBasename(), 0, -4);
             $project->gitDir     = $this->getRepoDirName($project->dir);

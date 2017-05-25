@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\SshHandler;
 use Pagemachine\AuthorizedKeys\PublicKey;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -19,25 +20,27 @@ class SshController extends Controller
      * @Route("ssh", name="ssh.index")
      * @Security("has_role('ROLE_ADMIN')")
      *
+     * @param SshHandler $handler
+     *
      * @return Response
      */
-    public function indexAction(): Response
+    public function indexAction(SshHandler $handler): Response
     {
-        return $this->render('ssh/index.html.twig', ['keys' => $this->get('app.ssh_handler')]);
+        return $this->render('ssh/index.html.twig', ['keys' => $handler]);
     }
 
     /**
      * @Route("ssh-add", name="ssh.add")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param Request $request
+     * @param Request    $request
+     * @param SshHandler $handler
      *
      * @return Response
      */
-    public function addAction(Request $request): Response
+    public function addAction(Request $request, SshHandler $handler): Response
     {
-        $key     = $request->request->get('key');
-        $handler = $this->get('app.ssh_handler');
+        $key = $request->request->get('key');
 
         if (!$key) {
             $this->addFlash('danger', 'No key supplied');
@@ -47,7 +50,6 @@ class SshController extends Controller
                 $handler->addKey($publicKey);
                 $handler->save();
                 $this->addFlash('success', 'The key hs been added');
-
             } catch (\Exception $exception) {
                 $this->addFlash('danger', $exception->getMessage());
             }
@@ -60,14 +62,14 @@ class SshController extends Controller
      * @Route("ssh-add-file", name="ssh.add-file")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param Request $request
+     * @param Request    $request
+     * @param SshHandler $handler
      *
      * @return Response
      */
-    public function addFromFileAction(Request $request): Response
+    public function addFromFileAction(Request $request, SshHandler $handler): Response
     {
         $file = $request->files->get('key_file');
-        $handler = $this->get('app.ssh_handler');
 
         if (!$file) {
             $this->addFlash('danger', 'No file received!');
@@ -95,14 +97,13 @@ class SshController extends Controller
      * @Route("ssh-remove/{comment}", name="ssh.remove")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param string $comment
+     * @param string     $comment
+     * @param SshHandler $handler
      *
      * @return Response
      */
-    public function removeAction(string $comment)
+    public function removeAction(string $comment, SshHandler $handler)
     {
-        $handler = $this->get('app.ssh_handler');
-
         $found = false;
 
         /* @type PublicKey $key */

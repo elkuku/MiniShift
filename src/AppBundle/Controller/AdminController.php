@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Service\ProjectHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -21,14 +22,15 @@ class AdminController extends Controller
      * @Route("remove/{project}", name="remove")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param string $project
+     * @param string         $project
+     * @param ProjectHandler $handler
      *
      * @return Response
      */
-    public function removeAction(string $project): Response
+    public function removeAction(string $project, ProjectHandler $handler): Response
     {
         try {
-            $this->get('app.project_handler')->rm($project);
+            $handler->rm($project);
             $this->addFlash('success', sprintf('Project %s has been removed.', $project));
         } catch (\Exception $exception) {
             $this->addFlash('danger', $exception->getMessage());
@@ -41,12 +43,12 @@ class AdminController extends Controller
      * @Route("new", name="new")
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param ProjectHandler $handler
      *
      * @return Response
-     *
      */
-    public function newAction(Request $request): Response
+    public function newAction(Request $request, ProjectHandler $handler): Response
     {
         $project = $request->request->get('project');
 
@@ -61,7 +63,7 @@ class AdminController extends Controller
         return $this->render(
             'default/index.html.twig',
             [
-                'projects'      => $this->get('app.project_handler')->getProjects(),
+                'projects'      => $handler->getProjects(),
                 'consoleOutput' => $output,
             ]
         );
