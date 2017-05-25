@@ -25,13 +25,15 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
                     aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}"><img src="{{ asset('bundles/app/img/monkey-toy-32.png') }}" style="display: inline"/>MiniShift</a>
+            <a class="navbar-brand" href="{{ path('homepage') }}">
+                <img src="{{ asset('bundles/app/img/monkey-toy-32.png') }}" style="display: inline"/>MiniShift
+            </a>
         </div>
-        {% include ('_menu.html.twig') %}
+        <div id="navbar" class="collapse navbar-collapse">
+            {% include ('_menu.html.twig') %}
+        </div><!--/.nav-collapse -->
     </div>
 </nav>
 
@@ -44,15 +46,7 @@
     </div>
 </div><!-- /.container -->
 
-<div class="footer navbar-fixed-bottom">
-    &bull; Hand crafted 2017 by <a href="https://github.com/elkuku">elkuku</a>
-    &bull; and <img src="{{ asset('bundles/app/img/monkey-toy-16.png') }}" />
-    &bull; using <a href="http://symfony.com">Symfony</a>
-    {% if app.user %}
-    &bull;  Version: {{ sha[:7] }}
-    {% endif %}
-    &bull; <code>=;)</code> &bull;
-</div>
+<div class="footer navbar-fixed-bottom">{% include ('_footer.html.twig') %}</div>
 
 {% block javascripts %}
     <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
