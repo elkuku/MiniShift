@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="text-center">
+        <h1 class="text-danger">{{ status_code }}</h1>
+        <img src="{{ asset('bundles/app/img/sad-monkey.png') }}"/>
+        <h2>{{ status_text ? : 'Unknown error' }}</h2>
+    </div>
+{% endblock %}
