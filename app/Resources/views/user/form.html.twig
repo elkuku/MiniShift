@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} - Change password{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Change password for user '{{ form.vars.value.userName }}'</div>
+                <div class="panel-body">
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+
+                    {{ form_widget(form.userName, {'attr': {'style': 'display:none'}}) }}
+
+                    <div class="form_group">
+                        <div class="col-md-8 col-md-offset-2">
+                            {{ form_row(form.plainPassword.first) }}
+                        </div>
+                    </div>
+
+                    <div class="form_group">
+                        <div class="col-md-8 col-md-offset-2">
+                            {{ form_row(form.plainPassword.second) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-8 col-md-offset-4">
+                            <button class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

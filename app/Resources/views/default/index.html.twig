@@ -5,8 +5,8 @@
         <div class="col-xs-1"><img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/></div>
         <div class="col-xs-3"><h1>Projects</h1></div>
         <div class="col-xs-8">
-            {% if app.user %}
-                <div class="btn btn-success btn-lg" onclick="$(this).hide();$('#new').fadeIn()"><strong>+</strong></div>
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="btn btn-success" onclick="$(this).hide();$('#new').fadeIn()"><strong>+</strong></div>
                 <form action="{{ path('new') }}" method="post" class="form-inline" id="new" style="display: none">
                     <div class="form-group">
                         <label for="project">New</label>
@@ -25,7 +25,9 @@
                     <th class="text-center">Clone</th>
                     <th class="text-center">Work</th>
                     <th class="text-center">Web</th>
-                    <th class="text-center">Action</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th class="text-center">Action</th>
+                    {% endif %}
                 </tr>
                 {% for project in projects %}
                     <tr>
@@ -33,9 +35,11 @@
                         <td>{{ project.cloneHost }}<br/>{{ project.cloneIp }}</td>
                         <td>{{ project.hasWorkDir ? 'OK' : 'MISSING' }}</td>
                         <td>{{ project.hasWebDir ? 'OK' : 'MISSING' }}</td>
-                        <td class="text-left">
-                            <a href="{{ path('remove', {'project': project.dir}) }}">Remove</a>
-                        </td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td class="text-left">
+                                <a href="{{ path('remove', {'project': project.dir}) }}">Remove</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </table>

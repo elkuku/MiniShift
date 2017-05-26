@@ -1,7 +1,8 @@
 {% block menu %}
     <ul class="nav navbar-nav">
-        {% if app.user %}
+        {% if is_granted('ROLE_ADMIN') %}
             <li><a href="{{ path('ssh.index') }}">SSH</a></li>
+            <li><a href="{{ path('users-list') }}">Users</a></li>
         {% endif %}
         <li><a href="{{ path('default.about') }}">About</a></li>
     </ul>
@@ -15,7 +16,8 @@
                 </a>
 
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path('logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                    <li><a href="{{ path('user-edit', {'id': app.user.id}) }}">Change Password</a></li>
+                    <li><a href="{{ path('logout') }}">Logout</a></li>
                 </ul>
             </li>
         {% else %}

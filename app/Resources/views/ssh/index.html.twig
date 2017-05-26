@@ -6,7 +6,7 @@
     <div class="row text-center">
         <div class="col-xs-1"><img src="{{ asset('bundles/app/img/monkey-toy-72.png') }}"/></div>
         <div class="col-xs-1"><h1>SSH</h1></div>
-        <div class="btn btn-success btn-lg" onclick="$('#forms').fadeIn();$(this).hide()"><strong>+</strong></div>
+        <div class="btn btn-success" onclick="$('#forms').fadeIn();$(this).hide()"><strong>+</strong></div>
         <div id="forms" style="display: none">
             <form action="{{ path('ssh.add') }}" method="post" class="form-inline">
                 <div class="col-xs-1">

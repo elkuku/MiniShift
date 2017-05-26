@@ -95,7 +95,7 @@ class User implements UserInterface
      */
     public function getUserName(): string
     {
-        return $this->userName;
+        return $this->userName ?: '';
     }
 
     /**
@@ -123,7 +123,7 @@ class User implements UserInterface
      */
     public function getPlainPassword(): string
     {
-        return $this->plainPassword;
+        return $this->plainPassword ?: '';
     }
 
     /**
