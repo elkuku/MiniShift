@@ -24,7 +24,7 @@ services:
         resource: '%kernel.project_dir%/src/AppBundle/Command'
         tags: ['controller.service_arguments']
 
-    AppBundle\Security\FormLoginAuthenticator:
+ #   AppBundle\Security\FormLoginAuthenticator:
 
     AppBundle\Service\ShaFinder:
         arguments:

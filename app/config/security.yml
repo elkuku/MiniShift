@@ -5,18 +5,17 @@ security:
         AppBundle\Entity\User: bcrypt
     providers:
         database_users:
-            entity: { class: AppBundle:User, property: userName }
+            entity: { class: AppBundle:User, property: username }
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+         secured_area:
+            pattern: ^/
+            anonymous: true
 
-        main:
-            anonymous: ~
-            guard:
-                authenticators:
-                    - AppBundle\Security\FormLoginAuthenticator
+            form_login:
+                login_path: login
+                check_path: login
+                csrf_token_generator: security.csrf.token_manager
+
             logout:
                 path: /logout
                 target: /

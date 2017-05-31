@@ -42,7 +42,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/login_check", name="security_login_check")
+     * @Route("/clogin_check", name="csecurity_login_check")
      */
     public function loginCheckAction()
     {

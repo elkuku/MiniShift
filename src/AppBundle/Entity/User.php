@@ -9,15 +9,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @UniqueEntity(fields="userName", message="This user name is already in use")
  */
-class User implements UserInterface
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id;
@@ -29,7 +29,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=40)
      */
-    protected $userName;
+    protected $username;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -93,9 +93,9 @@ class User implements UserInterface
     /**
      * @return string
      */
-    public function getUserName(): string
+    public function getUsername(): string
     {
-        return $this->userName ?: '';
+        return $this->username ?: '';
     }
 
     /**
@@ -147,14 +147,42 @@ class User implements UserInterface
     }
 
     /**
-     * @param string $userName
+     * @param string $username
      *
      * @return User
      */
-    public function setUserName(string $userName): User
+    public function setUsername(string $username): User
     {
-        $this->userName = $userName;
+        $this->username = $username;
 
         return $this;
+    }
+    /**
+     * String representation of object
+     * @link  http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->password,
+        ]);
+    }
+
+    /**
+     * Constructs the object
+     * @link  http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized The string representation of the object.
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            ) = unserialize($serialized);
     }
 }
