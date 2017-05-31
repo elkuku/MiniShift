@@ -58,7 +58,8 @@ class NewCommand extends ContainerAwareCommand
         $io = new SymfonyStyle($input, $output);
 
         $root    = $this->handler->getRoot();
-        $repoDir = $this->handler->getRepoDir().'/'.$this->handler->getRepoDirName($project);
+        $repoRootDir = $this->handler->getRepoDir();
+        $repoDir = $repoRootDir.'/'.$this->handler->getRepoDirName($project);
         $workDir = $this->handler->getWorkDir();
         $gitUser = $this->handler->getGitUser();
 
@@ -98,7 +99,7 @@ class NewCommand extends ContainerAwareCommand
             ->setHeaders(['', 'Host', 'Ip'])
             ->setRows(
                 [
-                    ['<info>Access</info>', "http://$host/$project", "http://$ip/$project"],
+                    ['<info>Access</info>', "http://$host/$repoRootDir/$project", "http://$ip/$repoRootDir/$project"],
                     ['<info>Clone</info>', "$gitUser@$host:$repoDir", "$gitUser@$ip:$repoDir"],
                 ]
             );
