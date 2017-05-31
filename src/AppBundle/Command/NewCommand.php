@@ -99,7 +99,7 @@ class NewCommand extends ContainerAwareCommand
             ->setHeaders(['', 'Host', 'Ip'])
             ->setRows(
                 [
-                    ['<info>Access</info>', "http://$host/$repoRootDir/$project", "http://$ip/$repoRootDir/$project"],
+                    ['<info>Access</info>', "http://$host$repoRootDir/$project", "http://$ip$repoRootDir/$project"],
                     ['<info>Clone</info>', "$gitUser@$host:$repoDir", "$gitUser@$ip:$repoDir"],
                 ]
             );
