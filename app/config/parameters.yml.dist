@@ -4,6 +4,7 @@
 parameters:
     git_user: git
     database_path: '%kernel.project_dir%/var/database.sqlite'
+    #env(DATABASE_URL): 'sqlite:///%kernel.project_dir%/var/data/blog.sqlite'
 
     # A secret key that's used to generate certain security-related tokens
     secret: ThisTokenIsNotSoSecretChangeIt
