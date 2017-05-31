@@ -14,6 +14,14 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    # makes classes in src/AppBundle available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    #AppBundle\:
+        #resource: '../../src/AppBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        #exclude: '../../src/AppBundle/{Controller,Entity,Repository,DataFixtures,Form}'
+
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
     AppBundle\Controller\:
@@ -24,19 +32,14 @@ services:
         resource: '%kernel.project_dir%/src/AppBundle/Command'
         tags: ['controller.service_arguments']
 
- #   AppBundle\Security\FormLoginAuthenticator:
-
     AppBundle\Service\ShaFinder:
-        arguments:
-            $root: '%kernel.project_dir%'
+          $root: '%kernel.project_dir%'
 
     AppBundle\Service\SshHandler:
-        arguments:
-            $gitUser: '%git_user%'
+          $gitUser: '%git_user%'
 
     AppBundle\Service\ProjectHandler:
-        arguments:
-            $root: '%kernel.project_dir%'
-            $gitUser: '%git_user%'
+          $root: '%kernel.project_dir%'
+          $gitUser: '%git_user%'
 
     AppBundle\Twig\AppExtension:
