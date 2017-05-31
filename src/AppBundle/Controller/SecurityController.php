@@ -42,13 +42,6 @@ class SecurityController extends Controller
     }
 
     /**
-     * @Route("/clogin_check", name="csecurity_login_check")
-     */
-    public function loginCheckAction()
-    {
-    }
-
-    /**
      * @Route("/logout", name="logout")
      */
     public function logoutAction()
