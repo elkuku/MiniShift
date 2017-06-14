@@ -2,13 +2,15 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Entity\Project;
+use AppBundle\Entity\User;
 use AppBundle\Service\ProjectHandler;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class RmCommand
@@ -21,15 +23,19 @@ class CheckCommand extends ContainerAwareCommand
      */
     private $handler;
 
+    private $entityManager;
+
     /**
      * InfoCommand constructor.
      *
-     * @param ProjectHandler $handler
-     * @param null           $name
+     * @param ProjectHandler         $handler
+     * @param EntityManagerInterface $em
+     * @param null                   $name
      */
-    public function __construct(ProjectHandler $handler, $name = null)
+    public function __construct(ProjectHandler $handler, EntityManagerInterface $em, $name = null)
     {
         $this->handler = $handler;
+        $this->entityManager = $em;
 
         parent::__construct($name);
     }
@@ -42,7 +48,6 @@ class CheckCommand extends ContainerAwareCommand
         $this
             ->setName('check')
             ->setDescription('Check a project.')
-            ->addArgument('signingKey', InputArgument::REQUIRED, 'The project name')
             ->addArgument('fingerPrint', InputArgument::REQUIRED, 'The project name')
             ->addArgument('project', InputArgument::REQUIRED, 'The project name')
         ;
@@ -53,13 +58,33 @@ class CheckCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $signingKey = $input->getArgument('signingKey');
         $fingerprint = $input->getArgument('fingerPrint');
-        $project = $input->getArgument('project');
+        $projectName = $input->getArgument('project');
 
-        var_dump($signingKey);
-        var_dump($fingerprint);
-        var_dump($project);
+        $projects = $this->entityManager->getRepository(Project::class)->findBy([], ['id' => 'DESC']);
+
+        $io = new SymfonyStyle($input, $output);
+
+        foreach ($projects as $project) {
+            if ($projectName === $project->getName()) {
+                if (!count($project->getUsers())) {
+                    $io->text('Project does not have access control setup.');
+
+                    return 0;
+                }
+
+                /* @type User $user */
+                foreach ($project->getUsers() as $user) {
+                    if ($fingerprint === $user->getGpgFpr()) {
+                        $io->success(sprintf('Access granted for user "%s" (%s)', $user->getUsername(), $user->getEmail()));
+
+                        return 0;
+                    }
+                }
+
+                return 1;
+            }
+        }
 
         return 1;
     }

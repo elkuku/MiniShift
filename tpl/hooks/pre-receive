@@ -10,8 +10,6 @@ ROOT_DIR=`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."`
 ROOT=$(realpath ${ROOT_DIR}/../..)
 PROJECT=$(basename ${ROOT_DIR} .git)
 
-${ROOT}/bin/console update ${PROJECT}
-
 read oldrev newrev refname;
 
 ## server config
@@ -26,33 +24,6 @@ allowunannotated=$(git config --bool hooks.allowunannotated)
 allowdeletetag=$(git config --bool hooks.allowdeletetag)
 allowmodifytag=$(git config --bool hooks.allowmodifytag)
 
-## committers and their signing GPG key fingerprints should go in the
-## ${collaborators} array:
-##
-## we hard code the fingerprint to protect against the possibility of the gpg
-## on the remote git server updating the keys (if it is configured to do so,
-## and also configured to use short keyids) and pulling in a colliding key from
-## a keyserver.
-##
-declare -A collaborators
-## Add collaborators like so:
-##
-## collaborators['nickname']='FINGERPRINT'
-##
-## For example, to add me, do:
-##
-## collaborators['isis']='0A6A 58A1 4B59 46AB DE18  E207 A3AD B67A 2CDB 8B35'
-
-collaborators['elkuku']='7586 EEFC 90C2 B5CA 0B1C  9C9C 9F91 02C3 C2FF 66A3'
-
-## get the keyids from the fingerprints above:
-declare -A trusted_keys
-for collab in "${!collaborators[@]}"; do
-    fpr="${collaborators["$collab"]}"
-    shortid=$(echo "$fpr" | cut -d ' ' --output-delimiter='' -f 8,9,10,11)
-    trusted_keys["$collab"]="$shortid"
-done
-
 is_allowed_signer() {
     signing_keyid=$1
 
@@ -61,47 +32,15 @@ is_allowed_signer() {
         return 1
     fi
 
-    fpr_signing_keyid=$(gpg --fingerprint "$signing_keyid" | \
+    fingerprint=$(gpg --fingerprint "$signing_keyid" | \
         grep -o -E "([0-9A-F]{4}[[:space:]]{0,2}){10}")
 
-    #echo SIGNING.. $signing_keyid
-    #echo FPR...... $fpr_signing_keyid
+    ${ROOT}/bin/console check "${fingerprint}" ${PROJECT}
 
-    allowed_keyid=1
-
-    for collab in "${!trusted_keys[@]}"; do
-        keyid="${trusted_keys["$collab"]}"
-
-        #echo CHECK KEY $keyid
-        #echo COLLAB $collab
-
-        if [ "$signing_keyid" = "$keyid" ]; then
-            ## check that the fingerprint of the key that
-            ## gave us a good signature matches the
-            ## hardcoded ones:
-            if [ "$fpr_signing_keyid" = "${collaborators["$collab"]}" ]; then
-                allowed_keyid=0
-                break
-            fi
-        fi
-    done
-
-    return $allowed_keyid
+    return $?
 }
 
-
-
-#echo oldrev $oldrev
-#echo newrev $newrev
-#echo refname $refname
-
-if [[ "${refname}" != "/refs/heads/master" && "${refname}" != "refs/heads/master" ]]; then
-  echo "ERROR: Only pushes to the 'master' branch are allowed"
- # exit 1
-fi
-
 short_ref=${refname##refs/tags/}
-#echo $short_ref
 
 ## a hash full of zeroes is how Git represents "nothing"
 zero="0000000000000000000000000000000000000000"
@@ -114,8 +53,6 @@ else
     span=$(git rev-list ^$oldrev $newrev)
 fi
 
-#echo SPAN $span
-
 if [ -z "$span" ]; then
     ## rev_new pointed to something considered by "git rev-list" to be
     ## already in the commit graph, which could be a commit (if we're
@@ -124,7 +61,7 @@ if [ -z "$span" ]; then
     ## object to be separate from the commit it points to
 
     type=$(git cat-file -t $newrev)
-#echo TYPE $type
+
     case $type in
         commit)
             ## lightweight tag
@@ -143,8 +80,6 @@ if [ -z "$span" ]; then
             else
                 if [ "$allowunsignedtags" != "true" ]; then
                     result=$(git verify-tag $newrev 2>&1 >/dev/null)
-
-                    #echo RESULT $result
 
                     if ! grep '^gpg: Good signature' <<< "$result"; then
                         ### Check German
@@ -187,18 +122,17 @@ fi
 
 ## for all the commits in the series, check the type of the commit against the
 ## commit directly before it:
+
 rev_cur=$oldrev                   ## set the current rev to the previous HEAD
+
 for commit in $span ; do
 
-    #echo COMMIT $commit
     ## check that the current revison object is a hexidecimal hash of length 40
     check_rev=$(git rev-parse --verify "$commit")
     if ! grep -q -E '^[0-9A-Fa-f]{40}$' <<< $check_rev; then
         echo "*** Commit hash is not 40 hex characters" >&2
         exit 1
     fi
-
-    #echo CHECK_REV $check_rev
 
     ## get the commit type of the current rev:
     ## a commit with a hash full of zeros is a deletion of a ref
@@ -218,8 +152,6 @@ for commit in $span ; do
             fi
         fi
     fi
-
-    #echo COMMIT_TYOE $commit_type
 
     ## the following returns non-null if $rev_cur is originating from branches
     ## beginning with the name "devel":
