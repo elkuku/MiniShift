@@ -15,16 +15,23 @@
         <tr>
             <th>Id</th>
             <th>Username</th>
+            <th>email</th>
             <th>Role</th>
+            <th>SSH</th>
+            <th>GPG</th>
             <th>Action</th>
         </tr>
         {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
                 <td>{{ user.role }}</td>
+                <td>{{ user.sshKey ? 'Yes' : 'No' }}</td>
+                <td>{{ user.gpgFpr ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('user-edit', {'id': user.id}) }}">Edit</a>
+                    <a href="{{ path('user-edit-keys', {'id': user.id}) }}">Keys</a>
                     <a href="{{ path('user-delete', {'id': user.id}) }}">Delete</a>
                 </td>
             </tr>

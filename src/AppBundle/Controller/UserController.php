@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\UserKeysType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -30,6 +31,42 @@ class UserController extends Controller
             ->findAll();
 
         return $this->render('user/list.html.twig', ['users' => $users]);
+    }
+
+    /**
+     * @Route("/user-edit-keys/{id}", name="user-edit-keys")
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function editKeysAction(User $user, Request $request)
+    {
+        $form = $this->createForm(UserKeysType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('success', 'User keys have been saved.');
+
+            return $this->redirectToRoute('users-list');
+        }
+
+        return $this->render(
+            'user/form_keys.html.twig',
+            [
+                'form' => $form->createView(),
+                'data' => $user,
+            ]
+        );
     }
 
     /**

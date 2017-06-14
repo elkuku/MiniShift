@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +46,46 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     protected $password;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $sshKey;
+
+    /**
+     * GPG Fingerprint
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $gpgFpr;
+
+    /**
+     * @var Project[]
+     *
+     * @ORM\ManyToMany(targetEntity="Project", inversedBy="users")
+     * @ORM\JoinTable(
+     *  name="user_project",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     *  }
+     * )
+     */
+    protected $projects;
+
+    /**
+     * Default constructor, initializes collections
+     */
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+    }
 
     /**
      * {@inheritdoc}
@@ -184,5 +225,101 @@ class User implements UserInterface, \Serializable
             $this->username,
             $this->password,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @param mixed $email
+     *
+     * @return User
+     */
+    public function setEmail($email): User
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSshKey()
+    {
+        return $this->sshKey;
+    }
+
+    /**
+     * @param mixed $sshKey
+     *
+     * @return $this
+     */
+    public function setSshKey($sshKey): User
+    {
+        $this->sshKey = $sshKey;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGpgFpr()
+    {
+        return $this->gpgFpr;
+    }
+
+    /**
+     * @param mixed $gpgFpr
+     *
+     * @return $this
+     */
+    public function setGpgFpr($gpgFpr): User
+    {
+        $this->gpgFpr = $gpgFpr;
+
+        return $this;
+    }
+
+    /**
+     * @param Project $project
+     */
+    public function addProject(Project $project)
+    {
+        if ($this->projects->contains($project)) {
+            return;
+        }
+
+        $this->projects->add($project);
+        $project->addUser($this);
+    }
+
+    /**
+     * @param Project $project
+     */
+    public function removeProject(Project $project)
+    {
+        if (!$this->projects->contains($project)) {
+            return;
+        }
+
+        $this->projects->removeElement($project);
+        $project->removeUser($this);
+    }
+
+    /**
+     * @param Project $project
+     *
+     * @return bool
+     */
+    public function hasProject(Project $project): bool
+    {
+        return $this->projects->contains($project);
     }
 }

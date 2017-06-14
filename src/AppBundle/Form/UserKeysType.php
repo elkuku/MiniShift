@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Class UserType
  * @package AppBundle\Form
  */
-class UserType extends AbstractType
+class UserKeysType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -28,17 +28,9 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class)
-            ->add('email', EmailType::class)
-            ->add(
-                'plainPassword',
-                RepeatedType::class,
-                [
-                    'type'           => PasswordType::class,
-                    'first_options'  => ['label' => 'Password'],
-                    'second_options' => ['label' => 'Confirm Password'],
-                ]
-            );
+            ->add('sshKey')
+            ->add('gpgFpr')
+            ;
     }
 
     /**

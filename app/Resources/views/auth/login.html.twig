@@ -46,3 +46,9 @@
         </div>
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#username').focus();
+    </script>
+{% endblock %}

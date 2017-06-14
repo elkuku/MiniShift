@@ -1,28 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent() }} - Change password{% endblock %}
+{% block title %} {{ parent() }} - Change user keys{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Change password for user '{{ form.vars.value.username }}'</div>
+                <div class="panel-heading">Keys for user '{{ form.vars.value.username }}' ({{ form.vars.value.email }})</div>
                 <div class="panel-body">
                     {{ form_start(form) }}
                     {{ form_errors(form) }}
 
-                    {{ form_widget(form.username, {'attr': {'style': 'display:none'}}) }}
-                    {{ form_widget(form.email, {'attr': {'style': 'display:none'}}) }}
-
                     <div class="form_group">
                         <div class="col-md-8 col-md-offset-2">
-                            {{ form_row(form.plainPassword.first) }}
+                            {{ form_row(form.sshKey) }}
                         </div>
                     </div>
 
                     <div class="form_group">
                         <div class="col-md-8 col-md-offset-2">
-                            {{ form_row(form.plainPassword.second) }}
+                            {{ form_row(form.gpgFpr) }}
                         </div>
                     </div>
 

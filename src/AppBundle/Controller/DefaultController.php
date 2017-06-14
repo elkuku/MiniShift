@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Project;
 use AppBundle\Service\ProjectHandler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -24,7 +25,10 @@ class DefaultController extends Controller
     {
         return $this->render(
             'default/index.html.twig',
-            ['projects' => $handler->getProjects()]
+            [
+                //'projects' => $handler->getProjects(),
+             'projects'    => $this->getDoctrine()->getRepository(Project::class)->findAll(),
+            ]
         );
     }
 
