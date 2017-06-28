@@ -3,7 +3,6 @@
 namespace AppBundle\Command;
 
 use AppBundle\Entity\Project;
-use AppBundle\Entity\User;
 use AppBundle\Service\ProjectHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -61,7 +60,7 @@ class CheckCommand extends ContainerAwareCommand
         $fingerprint = $input->getArgument('fingerPrint');
         $projectName = $input->getArgument('project');
 
-        $projects = $this->entityManager->getRepository(Project::class)->findBy([], ['id' => 'DESC']);
+        $projects = $this->entityManager->getRepository(Project::class)->findAll();
 
         $io = new SymfonyStyle($input, $output);
 
@@ -73,7 +72,6 @@ class CheckCommand extends ContainerAwareCommand
                     return 0;
                 }
 
-                /* @type User $user */
                 foreach ($project->getUsers() as $user) {
                     if ($fingerprint === $user->getGpgFpr()) {
                         $io->success(sprintf('Access granted for user "%s" (%s)', $user->getUsername(), $user->getEmail()));
@@ -85,6 +83,8 @@ class CheckCommand extends ContainerAwareCommand
                 return 1;
             }
         }
+
+        $io->error('Project not found');
 
         return 1;
     }
