@@ -71,7 +71,10 @@ class UpdateCommand extends ContainerAwareCommand
 
         if ($fs->exists($workDir)) {
             $io->text('Checkout');
-            echo shell_exec("git --work-tree=$workDir --git-dir=$repoDir checkout --recursive -f");
+            echo shell_exec("git --work-tree=$workDir --git-dir=$repoDir checkout -f");
+            if ($fs->exists($workDir.'/.gitmodules')) {
+                echo shell_exec("cd $workDir; git submodule init; git submodule update");
+            }
         } else {
             $io->text('Cloning');
             echo shell_exec("cd $workDir; git clone --recursive $repoDir");
