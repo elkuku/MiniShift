@@ -80,7 +80,7 @@ class UpdateCommand extends ContainerAwareCommand
         }
        // } else {
         $io->text('Cloning');
-        echo shell_exec("cd $workDir; git clone --recursive $repoDir");
+        echo shell_exec("cd {$this->handler->getWorkDir()}; git clone --recursive $repoDir $project");
         //}
 
         $contents = file_get_contents($repoDir.'/refs/heads/master');
