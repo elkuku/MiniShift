@@ -73,7 +73,7 @@ class UpdateCommand extends ContainerAwareCommand
             $io->text('Checkout');
             echo shell_exec("git --work-tree=$workDir --git-dir=$repoDir checkout -f");
             if ($fs->exists($workDir.'/.gitmodules')) {
-                echo shell_exec("cd $workDir; git submodule init; git submodule update");
+                echo shell_exec("cd $workDir && git submodule init && git submodule update");
             }
         } else {
             $io->text('Cloning');
