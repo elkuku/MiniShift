@@ -70,18 +70,17 @@ class UpdateCommand extends ContainerAwareCommand
         $io->title('Updating project '.$project);
 
         if ($fs->exists($workDir)) {
-            $fs->remove($workDir);
-//            $io->text('Checkout');
-  //          echo shell_exec("git --work-tree=$workDir --git-dir=$repoDir checkout -f");
-    //        if ($fs->exists($workDir.'/.gitmodules')) {
-      //          $io->text($workDir);
-        //        echo shell_exec("cd $workDir; pwd; git submodule init");
-        //        echo shell_exec("cd $workDir && pdw && git submodule update");
+            // $fs->remove($workDir);
+            $io->text('Checkout');
+            echo shell_exec("git --work-tree=$workDir --git-dir=$repoDir checkout -f");
+            //        if ($fs->exists($workDir.'/.gitmodules')) {
+            //          $io->text($workDir);
+            //        echo shell_exec("cd $workDir; pwd; git submodule init");
+            //        echo shell_exec("cd $workDir && pdw && git submodule update");
+        } else {
+            $io->text('Cloning');
+            echo shell_exec("cd {$this->handler->getWorkDir()}; git clone --recursive $repoDir $project");
         }
-       // } else {
-        $io->text('Cloning');
-        echo shell_exec("cd {$this->handler->getWorkDir()}; git clone --recursive $repoDir $project");
-        //}
 
         $contents = file_get_contents($repoDir.'/refs/heads/master');
 
