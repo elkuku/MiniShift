@@ -118,6 +118,9 @@ class UpdateCommand extends ContainerAwareCommand
         } elseif ($fs->exists($workDir.'/www')) {
             $io->text('Setting \'www\' directory as web root');
             $fs->symlink($workDir.'/www', $webDir);
+        } elseif ($fs->exists($workDir.'/public')) {
+            $io->text('Setting \'public\' directory as web root');
+            $fs->symlink($workDir.'/public', $webDir);
         } else {
             $io->note('Setting the PROJECT ROOT as web root');
             $fs->symlink($workDir, $webDir);
