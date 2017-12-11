@@ -95,7 +95,7 @@ class UpdateCommand extends ContainerAwareCommand
             // @codingStandardsIgnoreStart
             // Concat operator must not be surrounded by spaces...
             echo shell_exec(
-                "export SYMFONY_ENV=prod;"
+                "export SYMFONY_ENV=prod;APP_ENV=prod;"
                 ."cd $workDir;"
                 ."composer install --no-progress --no-dev --optimize-autoloader"
             );
