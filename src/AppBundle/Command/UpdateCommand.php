@@ -107,6 +107,11 @@ class UpdateCommand extends ContainerAwareCommand
             echo shell_exec("cd $workDir; bower install");
         }
 
+        if ($fs->exists($workDir.'/yarn.lock')) {
+            $io->section('Executing Yarn');
+            echo shell_exec("cd $workDir; yarn install; yarn run encore build");
+        }
+
         $io->section('Setup web dir');
         if ($fs->exists($webDir)) {
             $fs->remove($webDir);
