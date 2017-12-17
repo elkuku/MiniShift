@@ -109,7 +109,7 @@ class UpdateCommand extends ContainerAwareCommand
 
         if ($fs->exists($workDir.'/yarn.lock')) {
             $io->section('Executing Yarn');
-            echo shell_exec("cd $workDir; yarn install; yarn run encore build");
+            echo shell_exec("cd $workDir; yarn install; yarn run encore production");
         }
 
         $io->section('Setup web dir');
