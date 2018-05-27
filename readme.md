@@ -84,6 +84,7 @@ The following locations will be scanned for usage as web root in the following o
 
 1. `/web`
 1. `/www`
+1. `/public`
 1. `/` - The project root (for "old school style projects like Joomla!...)"
 
 ### Composer
@@ -95,6 +96,12 @@ If a `composer.json` file is found at the project root,`composer install` will b
 ### Bower
 
 If a `bower.json` file is found at the project root,`bower install` will be executed.
+
+`@todo` Add a flag to avoid this.
+
+### Yarn
+
+If a `yarn.lock` file is found at the project root,`yarn install` will be executed.
 
 `@todo` Add a flag to avoid this.
 
