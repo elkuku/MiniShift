@@ -13,7 +13,7 @@ NOT meant for any production like environments!
 ## Installation
 
 * Setup your server to serve git repositories for ssh users as explained in [The Book](https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server) (only setup the git user - we will do the rest)
-* Install [Composer](https://getcomposer.org) and [Bower](https://bower.io)
+* Install [Composer](https://getcomposer.org) and [Yarn](https://yarnpkg.com)
 * Clone this repository "somewhere" to your server.<br />
 It is assumed here that you clone to the directory `/git` at your servers root.<br />
 Otherwise change `/git` to your chosen path.
