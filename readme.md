@@ -19,7 +19,11 @@ It is assumed here that you clone to the directory `/git` at your servers root.<
 Otherwise change `/git` to your chosen path.
 * `cd /git`
 * `composer install`
-* `bower install`
+* `yarn install`
+* `./bin/console doctrine:database:create`
+* `./bin/console doctrine:schema:update --force`
+* `./bin/console doctrine:fixtures:load`
+* `yarn run encore production`
 * You **may** create a symlink like<br />
   `ln -s /git/bin/console /usr/bin/minishift`
 * Set The servers web root to `/git/web`.<br />
