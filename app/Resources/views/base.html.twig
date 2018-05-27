@@ -12,28 +12,23 @@
     <title>{% block title %}MiniShift{% endblock %}</title>
 
     {% block stylesheets %}
-        <link href="{{ asset('vendor/bootstrap/dist/css/bootstrap.css') }}" rel="stylesheet"/>
+        <link href="{{ asset('build/app.css') }}" rel="stylesheet"/>
         <link href="{{ asset('bundles/app/css/minishift.css') }}" rel="stylesheet"/>
     {% endblock %}
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ path('homepage') }}">
-                <img src="{{ asset('bundles/app/img/monkey-toy-32.png') }}" style="display: inline"/>MiniShift
-            </a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-            {% include ('_menu.html.twig') %}
-        </div><!--/.nav-collapse -->
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ path('homepage') }}">
+        <img src="{{ asset('bundles/app/img/monkey-toy-32.png') }}" style="display: inline"/>MiniShift
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% include ('_menu.html.twig') %}
     </div>
 </nav>
 
@@ -49,8 +44,8 @@
 <div class="footer navbar-fixed-bottom">{% include ('_footer.html.twig') %}</div>
 
 {% block javascripts %}
-    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('build/app.js') }}"></script>
+    <!-- <script src="{{ asset('build/manifest.json') }}"></script> -->
 {% endblock %}
 
 </body>

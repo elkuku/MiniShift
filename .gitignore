@@ -22,6 +22,8 @@
 !/web/admin
 
 /admin/bundles
-/admin/vendor
+/admin/build
 
 /vendor/
+
+/node_modules

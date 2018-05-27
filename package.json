@@ -1,0 +1,11 @@
+{
+  "license": "WTFPL",
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.3"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.20.1"
+  }
+}
