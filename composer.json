@@ -1,5 +1,5 @@
 {
-    "name": "elkuku/mini-shift",
+    "name": "mini-shift",
     "description": "Like OpenShift, just Mini",
     "license": "WTFPL",
     "authors": [
@@ -9,26 +9,37 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": "^7.1.3",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "doctrine/orm": "^2.5",
-        "incenteev/composer-parameter-handler": "^2.0",
         "pagemachine/authorized-keys": "^1.0",
-        "sensio/distribution-bundle": "^5.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
+        "sensio/framework-extra-bundle": "^5.1",
+        "symfony/apache-pack": "^1.0",
+        "symfony/asset": "^4.0",
+        "symfony/console": "^4.0",
+        "symfony/debug-pack": "^1.0",
+        "symfony/expression-language": "^4.0",
+        "symfony/flex": "^1.0",
+        "symfony/form": "^4.0",
+        "symfony/framework-bundle": "^4.0",
+        "symfony/lts": "^4@dev",
         "symfony/monolog-bundle": "^3.0.2",
         "symfony/polyfill-apcu": "^1.0",
-        "symfony/symfony": "^3.3",
-        "twig/twig": "^1.0||^2.0"
+        "symfony/security-bundle": "^4.0",
+        "symfony/security-csrf": "^4.0",
+        "symfony/twig-bundle": "^4.0",
+        "symfony/validator": "^4.0",
+        "symfony/yaml": "^4.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.0"
+      "symfony/dotenv": "^4.0"
     },
     "autoload": {
         "psr-4": {
-            "": "src/",
+          "AppBundle\\": "src/AppBundle",
+          "App\\": "src/",
             "MiniShift\\": "bin/"
         },
         "classmap": [
@@ -37,35 +48,29 @@
         ]
     },
     "scripts": {
-        "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+        },
         "post-install-cmd": [
-            "@symfony-scripts"
+            "@auto-scripts"
         ],
         "post-update-cmd": [
-            "@symfony-scripts"
+            "@auto-scripts"
         ]
     },
     "config": {
-        "sort-packages": true
+      "preferred-install": {
+        "*": "dist"
+      },
+      "sort-packages": true
+    },
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "admin",
-        "symfony-tests-dir": "tests",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        },
-        "branch-alias": null
+        "symfony": {
+            "allow-contrib": true
+        }
     }
-
 }

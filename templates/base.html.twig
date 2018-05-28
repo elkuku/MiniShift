@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="MiniShift">
+    <meta name="author" content="elkuku">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+
+    <title>{% block title %}MiniShift{% endblock %}</title>
+
+    {% block stylesheets %}
+        <link href="{{ asset('build/app.css') }}" rel="stylesheet"/>
+    {% endblock %}
+</head>
+
+<body>
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ path('homepage') }}">
+        <img src="{{ asset('build/images/monkey-toy-32.png') }}" style="display: inline"/>MiniShift
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        {% include ('_menu.html.twig') %}
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">{% include ('_flash-messages.html.twig') %}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">{% block body %}{% endblock %}</div>
+    </div>
+</div><!-- /.container -->
+
+<div class="footer navbar-fixed-bottom">{% include ('_footer.html.twig') %}</div>
+
+{% block javascripts %}
+    <script src="{{ asset('build/app.js') }}"></script>
+    <!-- <script src="{{ asset('build/manifest.json') }}"></script> -->
+{% endblock %}
+
+</body>
+</html>

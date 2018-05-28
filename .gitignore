@@ -1,15 +1,9 @@
-/app/config/parameters.yml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
 
 /repo/*
 !/repo/readme.md
@@ -21,9 +15,8 @@
 !/web/index.php
 !/web/admin
 
-/admin/bundles
-/admin/build
-
-/vendor/
-
 /node_modules
+
+/public/build
+
+/fakewebpack.config.js
